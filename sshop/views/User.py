@@ -34,7 +34,7 @@ class RegisterHandler(BaseHandler):
 
     def post(self, *args, **kwargs):
         if not self.check_captcha():
-            return self.render('login.html', danger=1)
+            return self.render('register.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
         username = self.get_argument('username')
         mail = self.get_argument('mail')
         password = self.get_argument('password')
@@ -45,7 +45,9 @@ class RegisterHandler(BaseHandler):
             return self.render('register.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
         if mail and username and password:
             try:
+                # have user
                 user = self.orm.query(User).filter(User.username == username).one()
+                return self.render('register.html', danger=1, ques=self.application.question,uuid=self.application.uuid)
             except NoResultFound:
                 self.orm.add(User(username=username, mail=mail,
                                   password=bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())))
