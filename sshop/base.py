@@ -21,6 +21,7 @@ class BaseHandler(tornado.web.RequestHandler):
                 uuid = self.application.uuid
                 answer = self.application._get_ans(uuid)
                 print x,y,uuid, answer
+                self.application._generate_captcha() # regen to make post method
                 if float(answer['ans_pos_x_1']) <= x <= (float(answer['ans_width_x_1']) + float(answer['ans_pos_x_1'])):
                     if float(answer['ans_pos_y_1']) <= y <= (
                             float(answer['ans_height_y_1']) + float(answer['ans_pos_y_1'])):
