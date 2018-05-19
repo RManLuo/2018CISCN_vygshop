@@ -18,7 +18,9 @@ class BaseHandler(tornado.web.RequestHandler):
             x = float(self.get_argument('captcha_x'))
             y = float(self.get_argument('captcha_y'))
             if x and y:
-                uuid = self.application.uuid
+                # hey gay
+                # uuid = self.application.decrypt(self.application.uuid)
+                uuid= self.application.real_uuid
                 answer = self.application._get_ans(uuid)
                 print x,y,uuid, answer
                 self.application._generate_captcha() # regen to make post method

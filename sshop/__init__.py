@@ -2,7 +2,7 @@ import os
 import views
 import tornado.web
 from settings import debug, cookie_secret
-
+from Crypto.Cipher import AES
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -27,6 +27,14 @@ class Application(tornado.web.Application):
         for root, dirs, files in os.walk(file_path):
             return files
 
+    def crypt(self,text):
+        cryptor = AES.new(self.settings["cookie_secret"][:16], AES.MODE_CFB, self.settings["cookie_secret"][-16:])
+        return cryptor.encrypt('%32s' % text)
+
+    def decrypt(self,cipher):
+        cryptor = AES.new(self.settings["cookie_secret"][:16], AES.MODE_CFB, self.settings["cookie_secret"][-16:])
+        return cryptor.decrypt(cipher).lstrip()
+
     def _get_ans(self, uuid):
         answer = {}
         with open(os.path.join(self.ans_path, 'ans%s.txt' % uuid), 'r') as f:
@@ -43,5 +51,8 @@ class Application(tornado.web.Application):
         from random import choice
         uuid = choice(uuids)
         ans = self._get_ans(uuid)
-        self.uuid = uuid
+        # hey gay
+        # self.uuid=self.crypt(uuid)
+        self.uuid = choice(uuids)
+        self.real_uuid = uuid
         self.question = ans['vtt_ques']
