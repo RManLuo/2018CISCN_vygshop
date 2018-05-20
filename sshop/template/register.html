@@ -1,38 +1,77 @@
 {% extends "layout.html" %}
 
+{% block loc %}
+注册
+{% end %}
+
 {% block body %}
-        <div class="row">
-            <form action="/register" method="post" class="col-lg-6 col-lg-offset-3">
+    <div class="container">
+         <form action="/register" method="post" class="needs-validation" style="width: 100%;" novalidate>
                 {% raw xsrf_form_html() %}
+            <div class="form-row justify-content-between">
+             <div class="col-lg-5">
                 <div class="form-group">
-                    <label>用户名：</label>
-                    <input type="text" class="form-control" name="username" placeholder="" required>
-                </div>
-                <div class="form-group">
-                    <label>邮箱：</label>
-                    <input type="email" class="form-control" name="mail" placeholder="" required>
-                </div>
-                <div class="form-group">
-                    <label>密码：</label>
-                    <input type="password" class="form-control" name="password" placeholder="" required>
+                    <label>用户名</label>
+                    <input type="text" class="form-control" name="username" placeholder="请输入用户名" required>
+                    <div class="invalid-feedback">请输入用户名</div>
+                    <small id="usernameHelp" class="form-text text-muted">请您牢记用户名，因为它将成为您登录的凭据。</small>
                 </div>
                 <div class="form-group">
-                    <label>确认密码：</label>
-                    <input type="password" class="form-control" name="password_confirm" placeholder="" required>
+                    <label>邮箱</label>
+                    <input type="email" class="form-control" name="mail" placeholder="请输入邮箱" required>
+                    <div class="invalid-feedback">请输入有效的邮箱</div>
                 </div>
                 <div class="form-group">
-                    <label>推荐人：</label>
-                    <input type="text" class="form-control" name="invite_user" placeholder="">
+                    <label>手机号</label>
+                    <input type="tel" class="form-control" name="phone" placeholder="请输入手机号" required>
+                    <div class="invalid-feedback">请输入有效的手机号</div>
+                    <small id="usernameHelp" class="form-text text-muted"><span class="oi oi-shield"></span>我们对您的信息将采用行业标准做法予以保障。</small>
                 </div>
-                 <div>
-                    <label>验证码 ( {{ ques }} )：</label><br/>
-                    <canvas id="vtt_captcha" width="680" height="460" rel="{{ uuid }}"></canvas>
-                    <input type="hidden" id="captcha_x" name="captcha_x" value="">
-                    <input type="hidden" id="captcha_y" name="captcha_y" value="">
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" class="form-control" name="password" placeholder="请输入密码" required>
+                    <div class="invalid-feedback">请输入密码</div>
                 </div>
-                <button class="btn btn-primary pull-right" type="submit">注册</button>
-            </form>
+                <div class="form-group">
+                    <label>确认密码</label>
+                    <input type="password" class="form-control" name="password_confirm" placeholder="请再次确认密码" required>
+                    <div class="invalid-feedback">请输入再次输入密码</div>
+                </div>
+                <div class="form-group">
+                    <label>推荐人</label>
+                    <input type="text" class="form-control" name="invite_user" placeholder="若您有好友推荐，请您输入好友的用户名">
+                </div>
+            </div>  
+                
+           
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label>验证码</label>
+                    {% include "captcha_inner.html" %}
+                 </div>
             </div>
-        <br/>
+          
+        </div> <!--form-row  -->
+
+        <div class="form-group">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+              <label class="form-check-label" for="invalidCheck">
+                已阅读并同意<a href="" onclick="alert('请您仔细阅读以下条款，如果您对本协议的任何条款表示异议，您可以选择不注册。当您注册成功，无论是进入本站，还是在本站上发布任何内容（即「内容」），均意味着您（即「用户」）完全接受本协议项下的全部条款。\n..\n...\n...\n..\n.....\n....')">服务条款</a>与<a href="" onclick="alert('本《隐私政策》（以下简称「本政策」）阐述了我们将如何处理您的个人信息和隐私信息，并申明了我们对保护隐私的承诺。但请您注意，我们未来有可能根据信息处理情境不时更新或修改本政策。因此，请您在注册以及提交个人信息前，详细阅读、了解并同意本政策和任何补充政策。\n..\n...\n...\n..\n.....\n....')">隐私协议</a>
+              </label>
+              <div class="invalid-feedback">
+                您只有同意我们的服务条款与隐私协议才能使用服务.
+              </div>
+            </div>
+        </div>
+        <button class="btn btn-success px-4" type="submit">注册</button>
+        <span class="text-muted align-middle" style="margin-left: 15px;">已有帐号? 点击<a href="./login">登录</a>.</span>
+
+    </form>
+{% include "validationjs.html" %}
+<br>
+ </div> 
+
+
 {% include "captcha.html" %}
 {% end %}

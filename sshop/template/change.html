@@ -1,23 +1,35 @@
 {% extends "layout.html" %}
 
+{% block loc %}
+修改密码
+{% end %}
+
 {% block body %}
+    <div class="container mt-5">
         <div class="row">
-            <form action="/user/change" method="post" class="col-lg-6 col-lg-offset-3">
+            <form action="/user/change" method="post" class="needs-validation col-lg-6 offset-lg-3">
                  {% raw xsrf_form_html() %}
                 <div class="form-group">
-                    <label>原密码：</label>
-                    <input type="password" class="form-control" name="old_password" placeholder="" required>
+                    <label>当前密码</label>
+                    <input type="password" class="form-control" name="old_password" placeholder="请输入当前使用的密码" required>
+                    <div class="invalid-feedback">请输入您的当前密码</div>
                 </div>
                 <div class="form-group">
-                    <label>新密码：</label>
-                    <input type="password" class="form-control" name="password" placeholder="" required>
+                    <label>新密码</label>
+                    <input type="password" class="form-control" name="password" placeholder="请输入新密码" required>
+                    <div class="invalid-feedback">请输入您的新密码</div>
                 </div>
                 <div class="form-group">
-                    <label>确认密码：</label>
-                    <input type="password" class="form-control" name="password_confirm" placeholder="" required>
+                    <label>确认密码</label>
+                    <input type="password" class="form-control" name="password_confirm" placeholder="请再次确认新密码" required>
+                    <div class="invalid-feedback">请确认您的新密码</div>
                 </div>
-                <button class="btn btn-primary pull-right" type="submit">修改</button>
+                <div class="text-center">          
+                   <button class="btn btn-outline-danger mt-4 px-5" type="submit">修改</button>
+                </div>
             </form>
             </div>
-        <br/>
+        </div>
+{% include "validationjs.html" %}
+    <br>
 {% end %}

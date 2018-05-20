@@ -1,20 +1,22 @@
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
-.marketing,
 .footer {
   padding-right: 15px;
   padding-left: 15px;
 }
 
+.block {
+  margin: 20px 15px;
+}
+
 /* Custom page header */
 .header {
-  padding-bottom: 20px;
+  padding-top: 15px;
+  padding-bottom: 10px;
   border-bottom: 1px solid #e5e5e5;
 }
 /* Make the masthead heading the same height as the navigation */
@@ -32,7 +34,7 @@ body {
 }
 
 /* Customize container */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .container {
     max-width: 730px;
   }
@@ -52,15 +54,17 @@ body {
 }
 
 /* Supporting marketing content */
-.marketing {
-  margin: 40px 0;
-}
 .marketing p + h4 {
   margin-top: 28px;
 }
 
+.oi {
+  font-size: 0.9em;
+  margin-right: 0.5em;
+}
+
 /* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 768px) {
   /* Remove the padding we set earlier */
   .header,
   .marketing,

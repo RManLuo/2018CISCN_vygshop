@@ -5,35 +5,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>sshop</title>
+    <title>VYG 乐购</title>
 
+    <link href="{{ static_url('open-iconic/font/css/open-iconic-bootstrap.min.css') }}" rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{{ static_url('css/jumbotron-narrow.css') }}" rel="stylesheet">
+<script src="{{ static_url('js/jquery-3.3.1.slim.min.js') }}"></script>
+<script src="{{ static_url('js/bootstrap.bundle.min.js') }}"></script>
+
 </head>
 
 <body>
 
+
+<nav class="navbar navbar-expand-lg sticky-top navbar-light bg-light" style="  box-shadow: 0 0 1.5rem rgba(0,0,0,0.15);">
+    <div class="container">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="./">VYG乐购 ~Beta~</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" href="/">商城<span class="sr-only">(主页)</span></a>
+      </li>
+      {% if current_user %}
+      <li class="nav-item">
+        <a class="nav-link" href="/seckill">秒杀活动</a>
+      </li>
+      {% end%}
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="有什么可以帮到您的么？" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+    </form>
+  </div>
+</div>
+</nav>
+
 <div class="container">
     <div class="header clearfix">
-        <nav>
-            <ul class="nav nav-pills pull-right">
-                <li role="presentation"><a href="/shop">商品列表</a></li>
+            <ul class="nav nav-pills justify-content-end card-header-pills" style="float: right">
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/shop"><span class="oi oi-grid-two-up"></span> 商城</a></li>
                 {% if current_user %}
-                <li role="presentation"><a href="/user">个人中心</a></li>
-                <li role="presentation"><a href="/seckill">！秒杀活动！</a></li>
-                <li role="presentation"><a href="/shopcar">购物车</a></li>
-                <li role="presentation"><a href="/user/change">修改密码</a></li>
-                <li role="presentation"><a href="/logout">注销</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/seckill"><span class="oi oi-bullhorn"></span> 秒杀活动！</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/shopcar"><span class="oi oi-cart"></span> 购物车</a></li>
+                <li class="nav-item dropdown">
+		    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="oi oi-info"></span> 管理</a>
+		    <div class="dropdown-menu dropdown-menu-right">
+		      <a class="dropdown-item" href="/user"><span class="oi oi-person"></span> 个人中心</a>
+		      <a class="dropdown-item" href="/user/change"><span class="oi oi-key"></span> 修改密码</a>
+		      <div class="dropdown-divider"></div>
+		      <a class="dropdown-item" href="/logout"><span class="oi oi-account-login"></span> 退出登录</a>
+		    </div>
+  		</li>
                 {% else %}
-                <li role="presentation"><a href="/login">登录</a></li>
-                <li role="presentation"><a href="/register">注册</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/login">登录</a></li>
+                <li class="nav-item" role="presentation"><a class="nav-link" href="/register">注册</a></li>
                 {% end%}
             </ul>
-        </nav>
-        <h3 class="text-muted">sshop</h3>
+        <h3 class="text-muted">{% block loc %}{% end %}</h3>
     </div>
     {% try %}
         {% if success %}
@@ -52,10 +87,11 @@
         {% end %}
     {% except %}
     {% end %}
-    {% block body %}{% end %}
+    <div class="block">{% block body %}{% end %}</div>
     <footer class="footer">
-        <p>&copy; 2016 Company, Inc.</p>
+        <p>Power by VYG Engine · &copy; 2018 Company, Inc.</p>
     </footer>
+</div>
 </div> <!-- /container -->
 </body>
 </html>
