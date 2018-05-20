@@ -73,7 +73,7 @@
     {% try %}
         {% if success %}
             <div class="alert alert-success alert-dismissable">
-                操作成功。{% if reason %}{{ reason }}{% end %}
+                操作成功。{% try %}{% if reason %}{{ reason }}{% end %}{% except %}{% end %}
             </div>
         {%end%}
     {% except %}
@@ -82,7 +82,7 @@
     {% try %}
         {% if danger %}
             <div class="alert alert-danger alert-dismissable">
-                操作失败。{% if reason %}{{ reason }}{% end %}
+                操作失败。{% try %}{% if reason %}{{ reason }}{% end %}{% except %}{% end %}
             </div>
         {% end %}
     {% except %}
