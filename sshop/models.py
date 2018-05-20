@@ -43,6 +43,7 @@ class User(BaseModel):
     integral = Column(FLOAT, default=1000)
     valid = Column(BOOLEAN(),default=False)
     check_code = Column(VARCHAR(10))
+    phone_number = Column(VARCHAR(20))
 
     def check(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf8'))

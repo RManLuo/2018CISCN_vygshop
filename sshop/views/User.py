@@ -4,6 +4,7 @@ from sshop.base import BaseHandler
 from sshop.models import User
 import bcrypt
 import random
+import re
 
 class UserLoginHanlder(BaseHandler):
     def get(self, *args, **kwargs):
@@ -40,17 +41,18 @@ class RegisterHandler(BaseHandler):
         password = self.get_argument('password')
         password_confirm = self.get_argument('password_confirm')
         invite_user = self.get_argument('invite_user')
+        phone_number = self.get_argument('phone')
 
         if password != password_confirm:
             return self.render('register.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
-        if mail and username and password:
+        if mail and username and password and re.match("^\d{11}",phone_number):
             try:
                 # have user
                 user = self.orm.query(User).filter(User.username == username).one()
                 return self.render('register.html', danger=1, ques=self.application.question,uuid=self.application.uuid)
             except NoResultFound:
                 check_code = "%04d" % random.randint(0, 9999)
-                self.orm.add(User(username=username, mail=mail,check_code=check_code,
+                self.orm.add(User(username=username, mail=mail,check_code=check_code,phone_number=phone_number,
                                   password=bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())))
 
                 print(check_code)

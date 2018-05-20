@@ -22,7 +22,7 @@
                 <label class="col-sm-3 col-md-2 col-form-label">手机号</label>
 
 		        <div class="col-sm-5">
-                  <input type="tel" class="form-control text-center" placeholder="{{ user.username }}" required readonly>
+                  <input type="tel" class="form-control text-center" placeholder="{{ user.phone_number }}" required readonly>
 		        </div>
   
                 <small id="phoneHelp" class="col-sm-4 px-md-2 text-muted">我们已经向您的手机发送了 4 位数字验证码</small>
@@ -36,7 +36,7 @@
                     <div class="invalid-feedback">请输入 4 位数字验证码</div>
 	            </div>
                 <div class="col-sm-4 px-md-2">
-		            <a id="codeHelp" class="btn btn-outline-secondary" style="height:calc(100% - 2px); width:100%; line-height: 2.2em; font-size: 1em; padding: inherit;" href="javascript: location.reload();">没有收到？重新发送</a>
+		            <a id="codeHelp" class="btn btn-outline-secondary" style="height:calc(100% - 2px); width:100%; line-height: 2.2em; font-size: 1em; padding: inherit;" href="/user/check/regen">没有收到？重新发送</a>
                 </div>
            </div>
         <button class="btn btn-info my-3" style="width: 10em;" type="submit">完成验证</button>
