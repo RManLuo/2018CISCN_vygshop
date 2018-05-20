@@ -1,3 +1,4 @@
+#coding:utf-8
 import tornado.web
 from sqlalchemy.orm.exc import NoResultFound
 from sshop.base import BaseHandler
@@ -35,9 +36,18 @@ class ShopPayHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         try:
-            price = self.get_argument('price')
+            cid = self.get_argument('id')
+            c = self.orm.query(Commodity).filter(Commodity.id==cid).one()
+            if c.amount<1:
+                return self.render('pay.html', danger=1, reason=u'缺货了。')
+
             user = self.orm.query(User).filter(User.username == self.current_user).one()
-            user.integral = user.pay(float(price))
+            final = user.pay(float(c.price))
+            if not final:
+                return self.render('pay.html', danger=1,reason=u'钱不够。')
+
+            user.integral = final
+            c.amount -= 1
             self.orm.commit()
             return self.render('pay.html', success=1)
         except:

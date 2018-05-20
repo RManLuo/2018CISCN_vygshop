@@ -76,4 +76,5 @@ if __name__ == "__main__":
         desc = ''.join(random.sample(string.ascii_letters * 5, 100))
         price = random.randint(10, 200)
         db.add(Commodity(name=name, desc=desc, price=price))
+    db.add(Commodity(name='Flag', desc="If you buy it, you can trigger some special function.", price=2048,amount=1))
     db.commit()

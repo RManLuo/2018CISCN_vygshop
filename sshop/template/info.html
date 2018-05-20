@@ -12,7 +12,7 @@
    <p>Amount: {{ commodity.amount }}</p>
    <form action="/pay" method="post">
       {% raw xsrf_form_html() %}
-      <input type="hidden" name="price" value="{{ commodity.price }}">
+      <input type="hidden" name="id" value="{{ commodity.id }}">
       <button class="btn btn-lg btn-success">Buy</button>
    </form>
 </div>
