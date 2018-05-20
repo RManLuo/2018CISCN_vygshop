@@ -3,7 +3,7 @@ import tornado.web
 from sqlalchemy.orm.exc import NoResultFound
 from sshop.base import BaseHandler
 from sshop.models import Commodity, User
-from sshop.settings import limit
+from sshop.settings import limit,on_seckill
 
 
 class ShopIndexHandler(BaseHandler):
@@ -91,15 +91,26 @@ class ShopCarAddHandler(BaseHandler):
 
 
 class SecKillHandler(BaseHandler):
-    def get(self, *args, **kwargs):
-        return self.render('seckill.html')
+    def __init__(self,*args,**kwargs):
+        super(SecKillHandler, self).__init__(*args,**kwargs)
+        self.kill_commodity=self.orm.query(Commodity).filter(Commodity.id == on_seckill).one()
 
+    def get(self, *args, **kwargs):
+        return self.render('seckill.html', commodity=self.kill_commodity)
+
+    @tornado.web.authenticated
     def post(self, *args, **kwargs):
         try:
             id = self.get_argument('id')
-            commodity = self.orm.query(Commodity).filter(Commodity.id == id).one()
-            commodity.amount -= 1
-            self.orm.commit()
-            return self.render('seckill.html', success=1)
+            if (int(id)!=self.kill_commodity.id or self.kill_commodity.amount<1):
+                return self.render('seckill.html', danger=1,reason='不能秒。',commodity=self.kill_commodity)
+            user = self.orm.query(User).filter(User.username == self.current_user).one()
+            if user.integral >= self.kill_commodity.price*0.5:
+                user.integral -= self.kill_commodity.price*0.5
+                self.kill_commodity.amount-=1
+                self.orm.commit()
+                return self.render('seckill.html', success=1, reason='秒成了。',commodity=self.kill_commodity)
+            else:
+                raise Exception
         except:
-            return self.render('seckill.html', danger=1)
+            return self.render('seckill.html', danger=1, reason='秒不动。',commodity=self.kill_commodity)

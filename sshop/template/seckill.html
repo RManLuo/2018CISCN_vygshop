@@ -1,12 +1,14 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <div class="jumbotron">
-       <h1>秒杀活动</h1>
-        <form action="" method="post">
-            {% raw xsrf_form_html() %}
-            <input class="hidden" name="id" value="1">
-            <button class="btn btn-danger" type="submit">秒杀</button>
-        </form>
-    </div>
+<div class="jumbotron">
+    <h1>秒杀活动</h1>
+    <form action="" method="post">
+        {% raw xsrf_form_html() %}
+        <p class="lead">当前正在参与秒杀的物品: {{commodity.name}} 现价 {{ commodity.price*0.5 }}<span class="badge badge-pill" style='background-color: #4c6b22; color: #a4d007; '>-50%</span></p>
+        <p>{{ commodity.desc }}</p>
+        <input class="form-control" name="id" value="{{ commodity.id }}" hidden>
+        <button class="btn btn-danger" type="submit">秒杀</button>
+    </form>
+</div>
 {% end %}
