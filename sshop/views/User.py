@@ -53,7 +53,8 @@ class RegisterHandler(BaseHandler):
                                   password=bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())))
                 self.orm.commit()
                 try:
-                    inviteUser = self.orm.query(User).filter(User.username == invite_user).one()
+                    inviteUser = self.orm.query(User).filter(User.username == invite_user)\
+                        .filter(User.username != username).one()
                     inviteUser.integral += 10
                     self.orm.commit()
                 except NoResultFound:
