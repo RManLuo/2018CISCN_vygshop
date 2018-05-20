@@ -6,7 +6,7 @@
 
 {% block body %}
 <div class="jumbotron user-info">
-    <h1 class="user-username">{{ user.username }}</h1>
+    <h1 class="user-username">{{ user.username }}{% if user.valid %}<span class="badge badge-pill badge-success">已实名</span>{% end %}</h1>
     <h3 class="user-email">邮箱地址：{{ user.mail }}</h3>
     <h3 class="user-integral">剩余积分：{{ user.integral }}</h3>
 </div>

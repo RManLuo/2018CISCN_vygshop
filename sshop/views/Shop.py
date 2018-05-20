@@ -4,7 +4,25 @@ from sqlalchemy.orm.exc import NoResultFound
 from sshop.base import BaseHandler
 from sshop.models import Commodity, User
 from sshop.settings import limit,on_seckill
+import functools
 
+def check_user_valid(method):
+    """Decorate methods with this to require that the user is valid.
+    Must put after @tornado.web.authenticated
+    """
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        try:
+            user=self.orm.query(User).filter(User.username == self.current_user).one()
+            if not user.valid:
+                raise Exception
+        except:
+            if self.request.method in ("GET", "HEAD","POST"):
+                url = '/user/check'
+                self.redirect(url)
+                return
+        return method(self, *args, **kwargs)
+    return wrapper
 
 class ShopIndexHandler(BaseHandler):
     def get(self, *args, **kwargs):
@@ -34,6 +52,7 @@ class ShopDetailHandler(BaseHandler):
 
 class ShopPayHandler(BaseHandler):
     @tornado.web.authenticated
+    @check_user_valid
     def post(self):
         try:
             cid = self.get_argument('id')
@@ -64,6 +83,7 @@ class ShopCarHandler(BaseHandler):
         return self.render('shopcar.html')
 
     @tornado.web.authenticated
+    @check_user_valid
     def post(self, *args, **kwargs):
         try:
             cid = self.get_argument('id')
@@ -99,14 +119,16 @@ class SecKillHandler(BaseHandler):
         return self.render('seckill.html', commodity=self.kill_commodity)
 
     @tornado.web.authenticated
+    @check_user_valid
     def post(self, *args, **kwargs):
         try:
             id = self.get_argument('id')
             if (int(id)!=self.kill_commodity.id or self.kill_commodity.amount<1):
                 return self.render('seckill.html', danger=1,reason='不能秒。',commodity=self.kill_commodity)
             user = self.orm.query(User).filter(User.username == self.current_user).one()
-            if user.integral >= self.kill_commodity.price*0.5:
-                user.integral -= self.kill_commodity.price*0.5
+            i=user.pay(self.kill_commodity.price*0.5)
+            if i:
+                user.integral = i
                 self.kill_commodity.amount-=1
                 self.orm.commit()
                 return self.render('seckill.html', success=1, reason='秒成了。',commodity=self.kill_commodity)
