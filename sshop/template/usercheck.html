@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="jumbotron">
+       <h1>{{ user.username }}请验证手机号</h1>
+        <form action="" method="post">
+            {% raw xsrf_form_html() %}
+            <input  name="code" value="" placeholder="4位数验证码">
+            <button class="btn btn-danger" type="submit">援交</button>
+            <a href="/user/check/regen" class="btn btn-success">重新发送</a>
+        </form>
+    </div>
+{% end %}

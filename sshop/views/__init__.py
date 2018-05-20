@@ -17,8 +17,11 @@ handlers = [
     (r'/user', UserInfoHandler),
     (r'/user/change', changePasswordHandler),
     (r'/pass/reset', ResetPasswordHanlder),
+    (r'/user/check',UserCheckHandler),
+    (r'/user/check/regen', UserCheckRegenHandler),
 
     (r'/login', UserLoginHanlder),
     (r'/logout', UserLogoutHandler),
-    (r'/register', RegisterHandler)
+    (r'/register', RegisterHandler),
+
 ]

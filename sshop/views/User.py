@@ -3,7 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sshop.base import BaseHandler
 from sshop.models import User
 import bcrypt
-
+import random
 
 class UserLoginHanlder(BaseHandler):
     def get(self, *args, **kwargs):
@@ -49,8 +49,12 @@ class RegisterHandler(BaseHandler):
                 user = self.orm.query(User).filter(User.username == username).one()
                 return self.render('register.html', danger=1, ques=self.application.question,uuid=self.application.uuid)
             except NoResultFound:
-                self.orm.add(User(username=username, mail=mail,
+                check_code = "%04d" % random.randint(0, 9999)
+                self.orm.add(User(username=username, mail=mail,check_code=check_code,
                                   password=bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())))
+
+                print(check_code)
+
                 self.orm.commit()
                 try:
                     inviteUser = self.orm.query(User).filter(User.username == invite_user)\
@@ -105,3 +109,31 @@ class UserLogoutHandler(BaseHandler):
     def get(self, *args, **kwargs):
         self.clear_cookie('username')
         self.redirect('/login')
+
+class UserCheckHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self, *args, **kwargs):
+        # get regenerate
+        user = self.orm.query(User).filter(User.username == self.current_user).one()
+        return self.render('usercheck.html', user=user)
+
+    @tornado.web.authenticated
+    def post(self, *args, **kwargs):
+        code = self.get_argument('code')
+        print code
+        user = self.orm.query(User).filter(User.username == self.current_user).one()
+        if user.check_code==code:
+            user.valid=True
+            self.orm.commit()
+            return self.redirect('/user')
+        return self.render('usercheck.html', user=user, danger=1)
+
+class UserCheckRegenHandler(BaseHandler):
+    @tornado.web.authenticated
+    def get(self, *args, **kwargs):
+        # get regenerate
+        user = self.orm.query(User).filter(User.username == self.current_user).one()
+        user.check_code="%04d"%random.randint(0, 9999)
+        print(user.check_code)
+        self.orm.commit()
+        return self.redirect('/user/check')

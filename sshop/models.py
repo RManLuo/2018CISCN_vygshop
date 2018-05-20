@@ -5,7 +5,7 @@ import random
 from datetime import date
 
 from sqlalchemy import Column
-from sqlalchemy.dialects.sqlite import FLOAT, VARCHAR, INTEGER
+from sqlalchemy.dialects.sqlite import FLOAT, VARCHAR, INTEGER, BOOLEAN
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -41,6 +41,8 @@ class User(BaseModel):
     mail = Column(VARCHAR(50))
     password = Column(VARCHAR(60))
     integral = Column(FLOAT, default=1000)
+    valid = Column(BOOLEAN(),default=False)
+    check_code = Column(VARCHAR(10))
 
     def check(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf8'))
