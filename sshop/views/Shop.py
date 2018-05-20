@@ -66,17 +66,21 @@ class ShopCarHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self, *args, **kwargs):
         try:
-            price = self.get_argument('price')
+            cid = self.get_argument('id')
+            commodity = self.orm.query(Commodity).filter(Commodity.id == cid).one()
             user = self.orm.query(User).filter(User.username == self.current_user).one()
-            res = user.pay(float(price))
+            res = user.pay(float(commodity.price))
             if res:
                 user.integral = res
+                commodity.amount-=1
                 self.orm.commit()
                 self.clear_cookie('commodity_id')
-                return self.render('shopcar.html', success=1)
+            else:
+                return self.render('shopcar.html', danger=1, reason=u'钱不够。')
         except Exception as ex:
-            print str(ex)
-        return self.redirect('/shopcar')
+            # print str(ex)
+            return self.render('shopcar.html', danger=1)
+        return self.render('shopcar.html', success=1)
 
 
 class ShopCarAddHandler(BaseHandler):
