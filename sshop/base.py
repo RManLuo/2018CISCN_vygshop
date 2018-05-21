@@ -1,6 +1,6 @@
 import tornado.web
 from models import db
-
+from sshop.models import User
 
 class BaseHandler(tornado.web.RequestHandler):
     @property
@@ -12,6 +12,9 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def get_current_user(self):
         return self.get_secure_cookie("username")
+
+    def get_current_user_obj(self):
+        return self.orm.query(User).filter(User.username==self.get_current_user()).one()
 
     def check_captcha(self):
         try:

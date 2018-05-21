@@ -1,7 +1,7 @@
 from Shop import *
 from User import *
 from Captcha import *
-
+from Ticket import *
 handlers = [
 
     (r'/', ShopIndexHandler),
@@ -24,4 +24,6 @@ handlers = [
     (r'/logout', UserLogoutHandler),
     (r'/register', RegisterHandler),
 
+    (r'/tickets', TicketIndexHandler),
+    (r'/tickets/(\d+)', TicketDetailHandler),
 ]

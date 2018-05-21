@@ -4,10 +4,10 @@ import bcrypt
 import random
 from datetime import date
 
-from sqlalchemy import Column
+from sqlalchemy import Column,ForeignKey
 from sqlalchemy.dialects.sqlite import FLOAT, VARCHAR, INTEGER, BOOLEAN
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker,relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 from settings import connect_str
@@ -67,7 +67,16 @@ class Shopcar(BaseModel):
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
 
+class Ticket(BaseModel):
+    __tablename__ ='ticket'
 
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    title = Column(VARCHAR(140))
+    html = Column(VARCHAR(2000))
+    markdown = Column(VARCHAR(500))
+    sender = Column(INTEGER,ForeignKey("user.id"))
+
+    sender_obj = relationship('User')
 
 if __name__ == "__main__":
     BaseModel.metadata.create_all(engine)

@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block loc %}
+工单系统
+{% end %}
+
+{% block body %}
+<div class="container">
+<!--<ul class="list-unstyled">-->
+<!--{% for data in tickets %}-->
+<!--<li class="media mb-3">-->
+  <!--<div class="align-self-end mr-3 border rounded-circle" style="background-color: rgba(0,0,0,0.1); width: 64px; height: 64px;" > </div>-->
+  <!--<div class="media-body">-->
+    <!--<div class="clearfix">-->
+    <!--<label class="float-left text-muted mb-2 mr-2"># {{ data.id }}</label> <h5 class="float-left mt-0 mb-1">{{ data.title }}</h5>-->
+<!--</div>-->
+    <!--<p>显示扣款 </p>-->
+
+<!--<p class="mb-0">-->
+    <!--<button class="btn btn-outline-primary btn-sm"> 查看? </button> <button class="btn btn-outline-primary btn-sm"> ？ </button>-->
+<!--</p>-->
+  <!--</div>-->
+<!--</li>-->
+<!--<hr>-->
+<!--{% end %}-->
+<!--</ul>-->
+
+    <div class="ticket-list">
+        <table class="table table-hover">
+	    <thead class="thead-light">
+            <tr>
+                <th>标题</th>
+                <th>提交人</th>
+                <th>操作</th>
+            </tr>
+	    </thead>
+	    <tbody class="">
+            {% for data in tickets %}
+            <tr>
+                <td class="ticket-name"><a href="/tickets/{{ data.id }}">{{ data.title }}</a></td>
+                <td>{{ data.sender_obj.username }}</td>
+                <td>
+                    <a href="javascript:;" onclick="requestAdd(this,'{{ data.id }}');">删除</a>
+                </td>
+            </tr>
+             {% end %}
+	    </tbody>
+        </table>
+        <!--<form id="form_shopcar" action="/shopcar/add" method="post" id="form_shopcar">-->
+             <!--{% raw xsrf_form_html() %}-->
+            <!--<input type="hidden" name="id" value="{{ data.id }}">-->
+        <!--</form>-->
+
+        <script>
+"use strict"
+function requestAdd(e,id)
+{
+        var form_shopcar = document.getElementById('form_shopcar');
+	e.innerText="加载中...";
+        form_shopcar.id.value = id;
+        form_shopcar.submit();
+}
+
+        </script>
+    </div>
+    <div class="pagination col-lg-12">
+
+	<nav aria-label="...">
+	  <ul class="pagination">
+        {% if preview-1 < 0 %}
+        <li class="page-item disabled">
+            <span class="page-link">上一页</span>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ preview }}">上一页</a>
+        </li>
+        {% end %}
+
+	    <!--{% for idx in range(preview-1, next+2) %}-->
+		    <!--{% if idx>0 %}-->
+	            <!--<li class="page-item{% if idx == next-1 %} active {% end %}">-->
+		        <!--{% if idx == next-1 %}-->
+                    <!--<span class="page-link">{{ idx }}</span> -->
+                    <!--<span class="sr-only">(current)</span> -->
+                <!--{% else %}-->
+                    <!--<a class="page-link" href="?page={{ idx }}">{{ idx }}</a>-->
+                <!--{% end %}-->
+	            <!--</li>-->
+            <!--{% end %}-->
+        <!--{% end %}-->
+
+        {% if len(tickets) < limit or not next %}
+        <li class="page-item disabled">
+            <span class="page-link">下一页</span>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ next }}">下一页</a>
+        </li>
+        {% end %}
+
+	  </ul>
+	</nav>
+    </div>
+</div>
+{% end %}

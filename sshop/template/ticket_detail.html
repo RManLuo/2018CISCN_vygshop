@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block loc %}
+工单系统
+{% end %}
+{% raw ticket.html %}
+{% block body %}
+<div class="container">
+    <h1>{{ ticket.title }}</h1>
+    <h2>发送者： {{ticket.sender_obj.username}}</h2>
+    <div>{% raw ticket.html%}</div>
+</div>
+{% end %}
