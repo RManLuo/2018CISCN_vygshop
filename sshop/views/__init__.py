@@ -25,5 +25,6 @@ handlers = [
     (r'/register', RegisterHandler),
 
     (r'/tickets', TicketIndexHandler),
+    (r'/tickets/create', TicketCreateHandler),
     (r'/tickets/(\d+)', TicketDetailHandler),
 ]
