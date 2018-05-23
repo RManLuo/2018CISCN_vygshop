@@ -2,7 +2,7 @@ import os
 import views
 import tornado.web
 from settings import debug, cookie_secret
-from Crypto.Cipher import AES
+# from Crypto.Cipher import AES
 import hashlib
 
 class Application(tornado.web.Application):
@@ -28,13 +28,13 @@ class Application(tornado.web.Application):
         for root, dirs, files in os.walk(file_path):
             return files
 
-    def crypt(self,text):
-        cryptor = AES.new(self.settings["cookie_secret"][:16], AES.MODE_CFB, self.settings["cookie_secret"][-16:])
-        return cryptor.encrypt('%32s' % text)
-
-    def decrypt(self,cipher):
-        cryptor = AES.new(self.settings["cookie_secret"][:16], AES.MODE_CFB, self.settings["cookie_secret"][-16:])
-        return cryptor.decrypt(cipher).lstrip()
+    # def crypt(self,text):
+    #     cryptor = AES.new(self.settings["cookie_secret"][:16], AES.MODE_CFB, self.settings["cookie_secret"][-16:])
+    #     return cryptor.encrypt('%32s' % text)
+    #
+    # def decrypt(self,cipher):
+    #     cryptor = AES.new(self.settings["cookie_secret"][:16], AES.MODE_CFB, self.settings["cookie_secret"][-16:])
+    #     return cryptor.decrypt(cipher).lstrip()
 
     def _get_ans(self, uuid):
         answer = {}
