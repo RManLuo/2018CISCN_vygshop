@@ -51,13 +51,7 @@ class TicketCreateHandler(BaseHandler):
         title = self.get_argument('title')
         markdown_input = self.get_argument('wmd-input')
         sender = self.get_current_user_obj().id
-        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
-                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p','img']
-        allowed_attr=['src','style']
-        html = bleach.linkify(bleach.clean(
-            markdown.markdown(markdown_input),
-            tags=allowed_tags,attributes=allowed_attr, strip=True))
-        self.orm.add(Ticket(title=title,markdown=markdown_input,sender=sender,html=html))
+        markdown_input_bleach = bleach.linkify(bleach.clean(markdown_input, strip=True))
+        self.orm.add(Ticket(title=title, markdown=markdown_input, sender=sender, html=markdown.markdown(markdown_input_bleach)))
         self.orm.commit()
         return self.redirect('/tickets')
