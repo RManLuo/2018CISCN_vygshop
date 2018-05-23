@@ -1,13 +1,15 @@
+# coding:utf-8
 import os
 import string
 import bcrypt
 import random
 from datetime import date
+import json
 
-from sqlalchemy import Column,ForeignKey
+from sqlalchemy import Column, ForeignKey
 from sqlalchemy.dialects.sqlite import FLOAT, VARCHAR, INTEGER, BOOLEAN
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker,relationship
+from sqlalchemy.orm import scoped_session, sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 from settings import connect_str
@@ -41,7 +43,7 @@ class User(BaseModel):
     mail = Column(VARCHAR(50))
     password = Column(VARCHAR(60))
     integral = Column(FLOAT, default=1000)
-    valid = Column(BOOLEAN(),default=False)
+    valid = Column(BOOLEAN(), default=False)
     check_code = Column(VARCHAR(10))
     phone_number = Column(VARCHAR(20))
 
@@ -63,27 +65,46 @@ class User(BaseModel):
 
 
 class Shopcar(BaseModel):
-    __tablename__ ='shopcar'
+    __tablename__ = 'shopcar'
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
 
+
 class Ticket(BaseModel):
-    __tablename__ ='ticket'
+    __tablename__ = 'ticket'
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
     title = Column(VARCHAR(140))
     html = Column(VARCHAR(2000))
     markdown = Column(VARCHAR(500))
-    sender = Column(INTEGER,ForeignKey("user.id"))
+    sender = Column(INTEGER, ForeignKey("user.id"))
 
     sender_obj = relationship('User')
 
+
+class SiteConfig(BaseModel):
+    __tablename__ = 'site_config'
+
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    name = Column(VARCHAR(140))
+    value = Column(VARCHAR(2000))
+
+
 if __name__ == "__main__":
     BaseModel.metadata.create_all(engine)
+    v = json.dumps({"api_url": os.environ.get('api_url'),
+                    "method": "1",
+                    "name": "data",
+                    "template": '''<root>
+    <tel>{tel}</tel>
+    <text>【VYG乐购】您的验证码为： {code}</text>
+</root>'''})
+    db.add(SiteConfig(name='sms_settings', value=v))
+
     for i in xrange(49):
         name = ''.join(random.sample(string.ascii_letters, 16))
         desc = ''.join(random.sample(string.ascii_letters * 5, 100))
         price = random.randint(10, 200)
         db.add(Commodity(name=name, desc=desc, price=price))
-    db.add(Commodity(name='Flag', desc="If you buy it, you can trigger some special function.", price=2048,amount=1))
+    db.add(Commodity(name='Flag', desc="If you buy it, you can trigger some special function.", price=2048, amount=1))
     db.commit()

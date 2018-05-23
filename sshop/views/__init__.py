@@ -2,6 +2,8 @@ from Shop import *
 from User import *
 from Captcha import *
 from Ticket import *
+from Settings import *
+
 handlers = [
 
     (r'/', ShopIndexHandler),
@@ -27,4 +29,6 @@ handlers = [
     (r'/tickets', TicketIndexHandler),
     (r'/tickets/create', TicketCreateHandler),
     (r'/tickets/(\d+)', TicketDetailHandler),
+
+    (r'/settings/sms',SettingsSMSHandler)
 ]
