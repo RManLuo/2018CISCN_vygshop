@@ -4,7 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sshop.base import BaseHandler
 from sshop.models import Commodity, User, Ticket
 from sshop.settings import limit,on_seckill
-import functools
+from tools import import_args
 from Shop import check_user_valid
 import bleach,markdown
 
@@ -39,8 +39,11 @@ class TicketDetailHandler(BaseHandler):
 class TicketCreateHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
-    def get(self):
-        return self.render('ticket_create.html')
+    @import_args
+    def get(self,url="",etime=""):
+        # TODO: error info
+        text='出现的错误链接：[该物品]({url})\n\n出现错误的时间：{etime}\n\n'.format(url=url,etime=etime)
+        return self.render('ticket_create.html',text=text)
 
     @tornado.web.authenticated
     @check_user_valid

@@ -5,6 +5,7 @@ from sshop.base import BaseHandler
 from sshop.models import Commodity, User
 from sshop.settings import limit,on_seckill
 import functools
+import random
 
 def check_user_valid(method):
     """Decorate methods with this to require that the user is valid.
@@ -65,12 +66,15 @@ class ShopPayHandler(BaseHandler):
             if not final:
                 return self.render('pay.html', danger=1,reason=u'钱不够。')
 
+            # stimulate the mystery situation
+            if random.randint(0,10)>9:
+                raise Exception
             user.integral = final
             c.amount -= 1
             self.orm.commit()
             return self.render('pay.html', success=1)
         except:
-            return self.render('pay.html', danger=1)
+            return self.render('pay_error.html', danger=1,reason=u'购买似乎出了点问题……联系管理员？')
 
 
 class ShopCarHandler(BaseHandler):
