@@ -11,7 +11,7 @@ import bleach,markdown
 class TicketIndexHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
-    def get(self):
+    def get(self,*args,**kwargs):
         page = self.get_argument('page', 1)
         page = int(page) if int(page) else 1
         if self.is_admin():
@@ -27,7 +27,7 @@ class TicketIndexHandler(BaseHandler):
 class TicketDetailHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
-    def get(self,id=1):
+    def get(self,id=1,*args,**kwargs):
         try:
             ticket=self.orm.query(Ticket).filter(Ticket.id==int(id)).one()
             if (not self.is_admin()) and ticket.sender_obj!=self.get_current_user_obj():
@@ -40,14 +40,14 @@ class TicketCreateHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
     @import_args
-    def get(self,url="",etime=""):
+    def get(self,url="",etime="",*args,**kwargs):
         # TODO: error info
         text='出现的错误链接：[该物品]({url})\n\n出现错误的时间：{etime}\n\n'.format(url=url,etime=etime)
         return self.render('ticket_create.html',text=text)
 
     @tornado.web.authenticated
     @check_user_valid
-    def post(self):
+    def post(self,*args,**kwargs):
         title = self.get_argument('title')
         markdown_input = self.get_argument('wmd-input')
         sender = self.get_current_user_obj().id

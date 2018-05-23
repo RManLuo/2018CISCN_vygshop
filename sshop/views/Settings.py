@@ -10,7 +10,7 @@ from tools import import_args
 class SettingsSMSHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
-    def get(self):
+    def get(self,*args,**kwargs):
         c = self.orm.query(SiteConfig).filter(SiteConfig.name=='sms_settings').one()
         return self.render('settings_sms.html',**json.loads(c.value))
 

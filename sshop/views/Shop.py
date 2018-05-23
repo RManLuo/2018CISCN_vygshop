@@ -31,7 +31,7 @@ class ShopIndexHandler(BaseHandler):
 
 
 class ShopListHandler(BaseHandler):
-    def get(self):
+    def get(self,*args,**kwargs):
         page = self.get_argument('page', 1)
         page = int(page) if int(page) else 1
         commoditys = self.orm.query(Commodity) \
@@ -42,7 +42,7 @@ class ShopListHandler(BaseHandler):
 
 
 class ShopDetailHandler(BaseHandler):
-    def get(self, id=1):
+    def get(self, id=1,*args,**kwargs):
         try:
             commodity = self.orm.query(Commodity) \
                 .filter(Commodity.id == int(id)).one()
@@ -54,7 +54,7 @@ class ShopDetailHandler(BaseHandler):
 class ShopPayHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
-    def post(self):
+    def post(self,*args,**kwargs):
         try:
             cid = self.get_argument('id')
             c = self.orm.query(Commodity).filter(Commodity.id==cid).one()

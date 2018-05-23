@@ -11,7 +11,7 @@ class UserLoginHanlder(BaseHandler):
         self.application._generate_captcha()
         return self.render('login.html', ques=self.application.question, uuid=self.application.uuid)
 
-    def post(self):
+    def post(self,*args,**kwargs):
         if not self.check_captcha():
             return self.render('login.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
         username = self.get_argument('username')
