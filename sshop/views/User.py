@@ -52,8 +52,9 @@ class RegisterHandler(BaseHandler):
                 return self.render('register.html', danger=1, ques=self.application.question,uuid=self.application.uuid)
             except NoResultFound:
                 check_code = "%04d" % random.randint(0, 9999)
-                self.orm.add(User(username=username, mail=mail,check_code=check_code,phone_number=phone_number,
-                                  password=bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())))
+                user=User(username=username, mail=mail,check_code=check_code,phone_number=phone_number,
+                                  password=bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()))
+                self.orm.add(user)
 
                 print(check_code)
 
@@ -61,7 +62,7 @@ class RegisterHandler(BaseHandler):
                 try:
                     inviteUser = self.orm.query(User).filter(User.username == invite_user)\
                         .filter(User.username != username).one()
-                    inviteUser.integral += 10
+                    user.inviter_id=inviteUser.id
                     self.orm.commit()
                 except NoResultFound:
                     pass
@@ -126,7 +127,12 @@ class UserCheckHandler(BaseHandler):
         user = self.orm.query(User).filter(User.username == self.current_user).one()
         if user.check_code==code:
             user.valid=True
-            self.orm.commit()
+            try:
+                inviteUser = self.orm.query(User).filter(User.id==user.inviter_id).one()
+                inviteUser.integral += 10
+                self.orm.commit()
+            except NoResultFound:
+                pass
             return self.redirect('/user')
         return self.render('usercheck.html', user=user, danger=1)
 

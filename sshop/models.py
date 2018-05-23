@@ -47,6 +47,7 @@ class User(BaseModel):
     check_code = Column(VARCHAR(10))
     phone_number = Column(VARCHAR(20))
     permission = Column(INTEGER ,default=0)
+    inviter_id = Column(INTEGER, ForeignKey('user.id'))
 
     def check(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf8'))
