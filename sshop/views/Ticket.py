@@ -14,8 +14,12 @@ class TicketIndexHandler(BaseHandler):
     def get(self):
         page = self.get_argument('page', 1)
         page = int(page) if int(page) else 1
+        if self.is_admin():
+            rule= True
+        else:
+            rule = (Ticket.sender_obj == self.get_current_user_obj())
         tickets = self.orm.query(Ticket) \
-            .filter(Ticket.sender_obj==self.get_current_user_obj())\
+            .filter(rule)\
             .order_by(Ticket.id.desc()) \
             .limit(limit).offset((page - 1) * limit).all()
         return self.render('tickets.html', tickets=tickets, preview=page - 1, next=page + 1, limit=limit)
@@ -25,8 +29,9 @@ class TicketDetailHandler(BaseHandler):
     @check_user_valid
     def get(self,id=1):
         try:
-            ticket=self.orm.query(Ticket).filter(Ticket.id==int(id))\
-                .filter(Ticket.sender_obj==self.get_current_user_obj()).one()
+            ticket=self.orm.query(Ticket).filter(Ticket.id==int(id)).one()
+            if (not self.is_admin()) and ticket.sender_obj!=self.get_current_user_obj():
+                raise Exception
             return self.render('ticket_detail.html',ticket=ticket)
         except:
             return self.redirect('/tickets')

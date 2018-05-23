@@ -8,3 +8,5 @@ on_seckill = 1
 
 connect_str = 'sqlite:///%s' % os.path.join(os.getcwd(), 'sshop.db3')
 cookie_secret = 'JDIOtOQQjLXklJT/N4aJE.tmYZ.IoK9M0_IHZW448b6exe7p1pysO'
+
+admin_permission_level=6

