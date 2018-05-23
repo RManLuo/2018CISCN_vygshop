@@ -6,25 +6,6 @@
 
 {% block body %}
 <div class="container">
-<!--<ul class="list-unstyled">-->
-<!--{% for data in tickets %}-->
-<!--<li class="media mb-3">-->
-  <!--<div class="align-self-end mr-3 border rounded-circle" style="background-color: rgba(0,0,0,0.1); width: 64px; height: 64px;" > </div>-->
-  <!--<div class="media-body">-->
-    <!--<div class="clearfix">-->
-    <!--<label class="float-left text-muted mb-2 mr-2"># {{ data.id }}</label> <h5 class="float-left mt-0 mb-1">{{ data.title }}</h5>-->
-<!--</div>-->
-    <!--<p>显示扣款 </p>-->
-
-<!--<p class="mb-0">-->
-    <!--<button class="btn btn-outline-primary btn-sm"> 查看? </button> <button class="btn btn-outline-primary btn-sm"> ？ </button>-->
-<!--</p>-->
-  <!--</div>-->
-<!--</li>-->
-<!--<hr>-->
-<!--{% end %}-->
-<!--</ul>-->
-
     <div class="ticket-list">
         <table class="table table-hover">
 	    <thead class="thead-light">
@@ -46,11 +27,6 @@
              {% end %}
 	    </tbody>
         </table>
-        <!--<form id="form_shopcar" action="/shopcar/add" method="post" id="form_shopcar">-->
-             <!--{% raw xsrf_form_html() %}-->
-            <!--<input type="hidden" name="id" value="{{ data.id }}">-->
-        <!--</form>-->
-
         <script>
 "use strict"
 function requestAdd(e,id)
