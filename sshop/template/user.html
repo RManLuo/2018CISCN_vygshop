@@ -5,9 +5,88 @@
 {% end %}
 
 {% block body %}
-<div class="jumbotron user-info">
-    <h1 class="user-username">{{ user.username }}{% if user.valid %}<span class="badge badge-pill badge-success">已验证</span>{% end %}</h1>
-    <h3 class="user-email">邮箱地址：{{ user.mail }}</h3>
-    <h3 class="user-integral">剩余积分：{{ user.integral }}</h3>
+<div class="row" style="margin: 0 -30px;">
+<div class="col-md-4">
+
+<div class="card mb-3">
+  
+  <div class="card-body">
+    <h5 class="card-title">{{ user.username }}</h5>
+    <p class="card-text">{{ user.mail }}</p>
+    <div class="card-text">
+        <span class="text-secondary">安全等级</span>
+        {% if user.valid %}
+        <span class="badge badge-pill badge-success float-right px-2 py-2" style="opacity: 0.8;">
+            已实名验证
+        {% else %}
+        <span class="badge badge-pill badge-danger float-right px-3 py-2" style="opacity: 0.8;">
+            帐号有风险
+        {% end %}
+        </span>
+    </div>
+    {% if user.valid %}
+        <div class="progress" style="margin: 1em 0; opacity: 0.8">
+	      <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="9" style="width: 100%"></div>
+	    </div>
+    {% else %}
+        <div class="progress" style="margin: 1em 0; opacity: 0.8">
+	      <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="9" style="width: 15%"></div>
+	    </div>
+    {% end %}
+  </div>
 </div>
+
+<div class="card mb-3 text-white bg-info">
+  <div class="card-body ">
+    <h5 class="card-title">感谢您参与内测</h5>
+    <p class="card-text">本平台仍在开发阶段，如果您遇到相关问题，还望您及时与我们取得联系，我们非常珍视您的每一份反馈。</p>
+  </div>
+</div>
+
+<div class="card mb-3" style="">
+  <div class="card-header">账户</div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><a href="#" class="card-link">积分记录</a></li>
+    <li class="list-group-item"><a href="#" class="card-link">订单管理</a></li>
+  </ul>
+  <div class="card-body">
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>
+
+<div class="card" style="">
+  <div class="card-header">
+    自助服务
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><a href="user/change" class="card-link">修改密码</a></li>
+    <li class="list-group-item"><a href="#" class="card-link">订单管理</a></li>
+  </ul>
+</div>
+
+</div>
+<div class="col-md-8">
+
+<div class="card">
+  <div class="card-header">
+    账户
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">欢迎您，{{ user.username }}.</h5>
+    <div class="card-text">
+      <div>
+    	<p class="text-muted mb-0">积分余额</p>
+    	<span class="my-0" style="font-size: 3em;">{{ user.integral }}</span>
+      </div>
+      <a href="/shop" class="btn btn-primary align-self-end mt-1">前往商城</a>
+    </div>
+    
+  </div>
+</div>
+
+
+</div>
+</div>
+
 {% end %}

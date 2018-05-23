@@ -7,7 +7,7 @@
         {% raw xsrf_form_html() %}
         <p class="lead">当前正在参与秒杀的物品: {{commodity.name}} 现价 {{ commodity.price*0.5 }}<span class="badge badge-pill" style='background-color: #4c6b22; color: #a4d007; '>-50%</span></p>
         <p>{{ commodity.desc }}</p>
-        <input class="form-control" name="id" value="{{ commodity.id }}" hidden>
+        <input type="hidden" name="id" value="{{ commodity.id }}">
         <button class="btn btn-danger" type="submit">秒杀</button>
     </form>
 </div>
