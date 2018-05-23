@@ -54,6 +54,7 @@ class Application(tornado.web.Application):
         ans = self._get_ans(uuid)
         # hey gay
         # self.uuid=self.crypt(uuid)
-        self.uuid = hashlib.sha1(hashlib.md5(uuid).hexdigest()).hexdigest()
+        # self.uuid = hashlib.sha1(hashlib.md5(uuid).hexdigest()).hexdigest()
+        self.uuid = uuid
         self.real_uuid = uuid
         self.question = ans['vtt_ques']

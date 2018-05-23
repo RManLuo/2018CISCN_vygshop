@@ -13,6 +13,8 @@ def check_user_valid(method):
     """
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
+        # no this needed...
+        return method(self, *args, **kwargs)
         try:
             user=self.orm.query(User).filter(User.username == self.current_user).one()
             if not user.valid:
@@ -56,7 +58,10 @@ class ShopPayHandler(BaseHandler):
     @check_user_valid
     def post(self,*args,**kwargs):
         try:
-            cid = self.get_argument('id')
+            try:
+                cid = self.get_argument('id')
+            except:
+                cid=1
             c = self.orm.query(Commodity).filter(Commodity.id==cid).one()
             if c.amount<1:
                 return self.render('pay.html', danger=1, reason=u'缺货了。')
@@ -66,9 +71,6 @@ class ShopPayHandler(BaseHandler):
             if not final:
                 return self.render('pay.html', danger=1,reason=u'钱不够。')
 
-            # stimulate the mystery situation
-            if random.randint(0,10)>9:
-                raise Exception
             user.integral = final
             c.amount -= 1
             self.orm.commit()
@@ -90,7 +92,10 @@ class ShopCarHandler(BaseHandler):
     @check_user_valid
     def post(self, *args, **kwargs):
         try:
-            cid = self.get_argument('id')
+            try:
+                cid = self.get_argument('id')
+            except:
+                cid=1
             commodity = self.orm.query(Commodity).filter(Commodity.id == cid).one()
             user = self.orm.query(User).filter(User.username == self.current_user).one()
             res = user.pay(float(commodity.price))

@@ -41,11 +41,11 @@ class RegisterHandler(BaseHandler):
         password = self.get_argument('password')
         password_confirm = self.get_argument('password_confirm')
         invite_user = self.get_argument('invite_user')
-        phone_number = self.get_argument('phone')
+        phone_number = ''
 
         if password != password_confirm:
             return self.render('register.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
-        if mail and username and password and re.match("^\d{11}",phone_number):
+        if mail and username and password:
             try:
                 # have user
                 user = self.orm.query(User).filter(User.username == username).one()
@@ -62,6 +62,7 @@ class RegisterHandler(BaseHandler):
                 try:
                     inviteUser = self.orm.query(User).filter(User.username == invite_user)\
                         .filter(User.username != username).one()
+                    inviteUser.integral += 10
                     user.inviter_id=inviteUser.id
                     self.orm.commit()
                 except NoResultFound:
