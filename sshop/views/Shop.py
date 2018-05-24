@@ -13,8 +13,6 @@ def check_user_valid(method):
     """
     @functools.wraps(method)
     def wrapper(self, *args, **kwargs):
-        # no this needed...
-        return method(self, *args, **kwargs)
         try:
             user=self.orm.query(User).filter(User.username == self.current_user).one()
             if not user.valid:
@@ -55,7 +53,7 @@ class ShopDetailHandler(BaseHandler):
 
 class ShopPayHandler(BaseHandler):
     @tornado.web.authenticated
-    @check_user_valid
+    # @check_user_valid
     def post(self,*args,**kwargs):
         try:
             try:
@@ -89,7 +87,7 @@ class ShopCarHandler(BaseHandler):
         return self.render('shopcar.html')
 
     @tornado.web.authenticated
-    @check_user_valid
+    # @check_user_valid
     def post(self, *args, **kwargs):
         try:
             try:
@@ -128,7 +126,7 @@ class SecKillHandler(BaseHandler):
         return self.render('seckill.html', commodity=self.kill_commodity)
 
     @tornado.web.authenticated
-    @check_user_valid
+    # @check_user_valid
     def post(self, *args, **kwargs):
         try:
             id = self.get_argument('id')
