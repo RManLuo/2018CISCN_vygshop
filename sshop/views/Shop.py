@@ -6,26 +6,7 @@ from sshop.models import Commodity, User
 from sshop.settings import limit,on_seckill
 import functools
 import random
-
-def check_user_valid(method):
-    """Decorate methods with this to require that the user is valid.
-    Must put after @tornado.web.authenticated
-    """
-    @functools.wraps(method)
-    def wrapper(self, *args, **kwargs):
-        # no this needed...
-        return method(self, *args, **kwargs)
-        try:
-            user=self.orm.query(User).filter(User.username == self.current_user).one()
-            if not user.valid:
-                raise Exception
-        except:
-            if self.request.method in ("GET", "HEAD","POST"):
-                url = '/user/check'
-                self.redirect(url)
-                return
-        return method(self, *args, **kwargs)
-    return wrapper
+from tools import *
 
 class ShopIndexHandler(BaseHandler):
     def get(self, *args, **kwargs):
@@ -55,7 +36,7 @@ class ShopDetailHandler(BaseHandler):
 
 class ShopPayHandler(BaseHandler):
     @tornado.web.authenticated
-    @check_user_valid
+    # @check_user_valid
     def post(self,*args,**kwargs):
         try:
             try:
@@ -89,7 +70,7 @@ class ShopCarHandler(BaseHandler):
         return self.render('shopcar.html')
 
     @tornado.web.authenticated
-    @check_user_valid
+    # @check_user_valid
     def post(self, *args, **kwargs):
         try:
             try:
@@ -128,7 +109,7 @@ class SecKillHandler(BaseHandler):
         return self.render('seckill.html', commodity=self.kill_commodity)
 
     @tornado.web.authenticated
-    @check_user_valid
+    # @check_user_valid
     def post(self, *args, **kwargs):
         try:
             id = self.get_argument('id')

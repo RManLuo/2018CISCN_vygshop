@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block loc %}
-工单系统
+工单系统 <a href="/tickets/create" class="btn btn-primary align-self-end mt-1"><span class="oi oi-plus"></span>提交</a>
 {% end %}
 
 {% block body %}
@@ -52,19 +52,6 @@ function requestAdd(e,id)
             <a class="page-link" href="?page={{ preview }}">上一页</a>
         </li>
         {% end %}
-
-	    <!--{% for idx in range(preview-1, next+2) %}-->
-		    <!--{% if idx>0 %}-->
-	            <!--<li class="page-item{% if idx == next-1 %} active {% end %}">-->
-		        <!--{% if idx == next-1 %}-->
-                    <!--<span class="page-link">{{ idx }}</span> -->
-                    <!--<span class="sr-only">(current)</span> -->
-                <!--{% else %}-->
-                    <!--<a class="page-link" href="?page={{ idx }}">{{ idx }}</a>-->
-                <!--{% end %}-->
-	            <!--</li>-->
-            <!--{% end %}-->
-        <!--{% end %}-->
 
         {% if len(tickets) < limit or not next %}
         <li class="page-item disabled">
