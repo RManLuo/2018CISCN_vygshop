@@ -114,7 +114,7 @@ class WebExp:
         print ip
         s.close()
 
-        # self.register_test()
+        self.register_test()
         self.login_test()
 
         rs = self.session.get(self.url + 'tickets')
