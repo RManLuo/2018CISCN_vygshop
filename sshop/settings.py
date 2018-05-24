@@ -3,7 +3,7 @@ import os
 limit = 10
 username = '4uuu'
 email = 'i@qvq.im'
-debug = True
+debug = False if os.environ.get("product") else True
 on_seckill = 2
 
 connect_str = 'sqlite:///%s' % os.path.join(os.getcwd(), 'sshop.db3')
