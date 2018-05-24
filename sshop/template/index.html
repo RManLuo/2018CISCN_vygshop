@@ -9,80 +9,80 @@
 
     <div class="commodity-list">
         <table class="table table-hover">
-	    <thead class="thead-light">
+            <thead class="thead-light">
             <tr>
                 <th>商品名称</th>
                 <th>商品价格</th>
                 <th>操作</th>
             </tr>
-	    </thead>
-	    <tbody class="">
+            </thead>
+            <tbody class="">
             {% for data in commoditys %}
             <tr>
                 <td class="commodity-name"><a href="/info/{{ data.id }}">{{ data.name }}</a></td>
                 <td>{{ data.price }}</td>
                 <td>
                     <a href="javascript:;" onclick="requestAdd(this,'{{ data.id }}');">加入购物车</a>
+                    <form id="form_shopcar" action="/shopcar/add" method="post" id="form_shopcar">
+                        {% raw xsrf_form_html() %}
+                        <input type="hidden" name="id" value="{{ data.id }}">
+                    </form>
                 </td>
             </tr>
             {% end %}
-	    </tbody>
+            </tbody>
         </table>
-        <form id="form_shopcar" action="/shopcar/add" method="post" id="form_shopcar">
-             {% raw xsrf_form_html() %}
-            <input type="hidden" name="id" value="{{ data.id }}">
-        </form>
         <script>
-"use strict"
-function requestAdd(e,id)
-{
-        var form_shopcar = document.getElementById('form_shopcar');
-	e.innerText="加载中...";
-        form_shopcar.id.value = id;
-        form_shopcar.submit();
-}
+            "use strict"
+
+            function requestAdd(e, id) {
+                var form_shopcar = document.getElementById('form_shopcar');
+                e.innerText = "加载中...";
+                form_shopcar.id.value = id;
+                form_shopcar.submit();
+            }
 
         </script>
     </div>
     <div class="pagination col-lg-12">
 
-	<nav aria-label="...">
-	  <ul class="pagination">
-        {% if preview-1 < 0 %}
-        <li class="page-item disabled">
-            <span class="page-link">上一页</span>
-        </li>
-        {% else %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ preview }}">上一页</a>
-        </li>
-        {% end %}
-
-	    {% for idx in range(preview-1, next+2) %}
-		    {% if idx>0 %}
-	            <li class="page-item{% if idx == next-1 %} active {% end %}">
-		        {% if idx == next-1 %}
-                    <span class="page-link">{{ idx }}</span> 
-                    <span class="sr-only">(current)</span> 
+        <nav aria-label="...">
+            <ul class="pagination">
+                {% if preview-1 < 0 %}
+                <li class="page-item disabled">
+                    <span class="page-link">上一页</span>
+                </li>
                 {% else %}
-                    <a class="page-link" href="?page={{ idx }}">{{ idx }}</a>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ preview }}">上一页</a>
+                </li>
                 {% end %}
-	            </li>
-            {% end %}
-        {% end %}
 
-        {% if len(commoditys) < limit or not next %}
-        <li class="page-item disabled">
-            <span class="page-link">下一页</span>
-        </li>
-        {% else %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ next }}">下一页</a>
-        </li>
-        {% end %}
+                {% for idx in range(preview-1, next+2) %}
+                {% if idx>0 %}
+                <li class="page-item{% if idx == next-1 %} active {% end %}">
+                    {% if idx == next-1 %}
+                    <span class="page-link">{{ idx }}</span>
+                    <span class="sr-only">(current)</span>
+                    {% else %}
+                    <a class="page-link" href="?page={{ idx }}">{{ idx }}</a>
+                    {% end %}
+                </li>
+                {% end %}
+                {% end %}
 
-	  </ul>
-	</nav>
+                {% if len(commoditys) < limit or not next %}
+                <li class="page-item disabled">
+                    <span class="page-link">下一页</span>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ next }}">下一页</a>
+                </li>
+                {% end %}
+
+            </ul>
+        </nav>
     </div>
 </div>
 {% end %}
