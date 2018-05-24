@@ -42,3 +42,11 @@ class BaseHandler(tornado.web.RequestHandler):
         except Exception as ex:
             print str(ex)
             return False
+
+    def write_error(self, status_code, **kwargs):
+        if status_code == 404:
+            self.render('404.html')
+        elif status_code == 403:
+            self.render('403.html')
+        else:
+            super(BaseHandler, self).write_error(status_code, **kwargs)
