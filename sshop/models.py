@@ -102,7 +102,7 @@ if __name__ == "__main__":
     <text>【VYG乐购】您的验证码为： {code}</text>
 </root>'''})
     db.add(SiteConfig(name='sms_settings', value=v))
-
+    db.add(SiteConfig(name='force_phone_check',value='false'))
     for i in xrange(49):
         name = ''.join(random.sample(string.ascii_letters, 16))
         desc = ''.join(random.sample(string.ascii_letters * 5, 100))

@@ -1,5 +1,5 @@
 import functools
-from sshop.models import SiteConfig,db
+from sshop.models import SiteConfig,db,User
 import json
 import tornado.web
 
@@ -32,3 +32,22 @@ def set_config(config_name,obj):
         db.commit()
     except:
         raise tornado.web.HTTPError(500)
+
+def check_user_valid(method):
+    """Decorate methods with this to require that the user is valid.
+    Must put after @tornado.web.authenticated
+    """
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        try:
+            if read_config('force_phone_check'):
+                user=self.orm.query(User).filter(User.username == self.current_user).one()
+                if not user.valid:
+                    raise Exception
+        except:
+            if self.request.method in ("GET", "HEAD","POST"):
+                url = '/user/check'
+                self.redirect(url)
+                return
+        return method(self, *args, **kwargs)
+    return wrapper
