@@ -51,3 +51,14 @@ def check_user_valid(method):
                 return
         return method(self, *args, **kwargs)
     return wrapper
+
+def check_user_admin(method):
+    """Decorate methods with this to require that the user is admin.
+    Must put after @tornado.web.authenticated
+    """
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        if not self.is_customer_service():
+            raise tornado.web.HTTPError(404)
+        return method(self, *args, **kwargs)
+    return wrapper

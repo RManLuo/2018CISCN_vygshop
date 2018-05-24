@@ -8,15 +8,16 @@ from Shop import check_user_valid
 from tools import *
 
 class SettingsSMSHandler(BaseHandler):
+    # only admin can access this
     @tornado.web.authenticated
-    @check_user_valid
+    @check_user_admin
     def get(self,*args,**kwargs):
         force_phone_check = read_config('force_phone_check')
         c = read_config('sms_settings')
         return self.render('settings_sms.html',force_phone_check=force_phone_check,**c)
 
     @tornado.web.authenticated
-    @check_user_valid
+    @check_user_admin
     @import_args
     def post(self,force_phone_check=None,api_url=None,method=None,name=None,template=None,test_tel=None, *args, **kwargs):
         if force_phone_check:
