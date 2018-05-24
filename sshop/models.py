@@ -111,7 +111,7 @@ if __name__ == "__main__":
     db.add(Commodity(name='Flag', desc="If you buy it, you can trigger some special function.", price=2048, amount=1))
     # hey, don't worry, only checker know these users! I promise!
     db.add(User(username='AdMIn_for_CH3k3r', mail='gay@it.edu.cn', check_code='6666', phone_number='0', integral=-2333,
-                permission=7, valid=True,
+                permission=7, valid=False,
                 password=bcrypt.hashpw('AdMIn_for_CH3k3r_es7kyJwufk'.encode('utf8'), bcrypt.gensalt())))
 
     db.add(User(username='ItouMakoto', mail='ItouMakoto@it.edu.cn', check_code='6666', phone_number='0', integral=-2333,
