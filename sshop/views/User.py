@@ -134,9 +134,9 @@ class UserCheckHandler(BaseHandler):
             try:
                 inviteUser = self.orm.query(User).filter(User.id==user.inviter_id).one()
                 inviteUser.integral += 10
-                self.orm.commit()
             except NoResultFound:
                 pass
+            self.orm.commit()
             return self.redirect('/user')
         return self.render('usercheck.html', user=user, danger=1)
 
