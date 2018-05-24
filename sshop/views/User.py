@@ -157,9 +157,11 @@ class UserCheckRegenHandler(BaseHandler):
         text = template.format(tel=user.phone_number, code='1234')
         try:
             if method == '0':
-                requests.get(api_url, params={name: text})
+                res=requests.get(api_url, params={name: text})
             if method == '1':
-                requests.post(api_url, data={name: text})
+                res=requests.post(api_url, data={name: text})
+            if self.is_customer_service():
+                return self.write(res.text)
         except Exception,e:
             print str(e)
         return self.redirect('/user/check')

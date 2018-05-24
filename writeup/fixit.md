@@ -1,9 +1,18 @@
-#fixit
-1、xss
-markdown imgurl 正则修改，inlinepatterns.py
+# fixit
+
+## 1、XSS
+
+markdown imgurl 正则修改
+
+* 修改 `inlinepatterns.py`
+
+```python
 IMAGE_LINK_RE = r'\!' + BRK + r'\s*\(\s*(<.*?>|([^"\)\s]+\s*"[^"]*"|[^\)\s]*))\s*\)'
-2、url判断修改
-"""
+```
+
+## 2、url 判断修改
+
+```python
 def sanitize_url(self, url):
 	try:
             scheme, netloc, path, params, query, fragment = url = urlparse(url)
@@ -29,6 +38,10 @@ def sanitize_url(self, url):
 
         # Url passes all tests. Return url as-is.
         return urlunparse(url)
-"""
-3、实体化过滤、"过滤修改serializers.py
-增加过滤&"
+```
+
+## 3、实体化过滤
+
+修改 `serializers.py`
+
+* 增加过滤 `&`
