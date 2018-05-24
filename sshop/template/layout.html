@@ -59,6 +59,11 @@
 		    <div class="dropdown-menu dropdown-menu-right">
 		      <a class="dropdown-item" href="/user"><span class="oi oi-person"></span> 个人中心</a>
 		      <a class="dropdown-item" href="/user/change"><span class="oi oi-key"></span> 修改密码</a>
+                {% try %}
+                {% if customer_service_mode %}
+                <a class="dropdown-item" href="/settings/sms"><span class="oi oi-cog"></span>短信服务配置</a>
+                {% end %}{% except %}
+                {% end %}
 		      <div class="dropdown-divider"></div>
 		      <a class="dropdown-item" href="/logout"><span class="oi oi-account-login"></span> 退出登录</a>
 		    </div>

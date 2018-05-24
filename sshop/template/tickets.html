@@ -19,7 +19,7 @@
             {% for data in tickets %}
             <tr>
                 <td class="ticket-name"><a href="/tickets/{{ data.id }}">{{ data.title }}</a></td>
-                <td>{{ data.sender_obj.username }}</td>
+                <td><a href="/user/{{ data.sender_obj.id }}">{{ data.sender_obj.username }}</a></td>
                 <td>
                     <a href="javascript:;" onclick="requestAdd(this,'{{ data.id }}');">删除</a>
                 </td>

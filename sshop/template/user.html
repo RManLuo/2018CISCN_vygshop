@@ -18,11 +18,12 @@
         {% if user.valid %}
         <span class="badge badge-pill badge-success float-right px-2 py-2" style="opacity: 0.8;">
             已实名验证
-        {% else %}
-        <span class="badge badge-pill badge-danger float-right px-3 py-2" style="opacity: 0.8;">
-            帐号有风险
-        {% end %}
         </span>
+        {% else %}
+        <a href="/user/check"><span class="badge badge-pill badge-danger float-right px-3 py-2" style="opacity: 0.8;">
+            帐号有风险
+        </span></a>
+        {% end %}
     </div>
     {% if user.valid %}
         <div class="progress" style="margin: 1em 0; opacity: 0.8">
