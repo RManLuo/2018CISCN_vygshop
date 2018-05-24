@@ -14,7 +14,7 @@ class TicketIndexHandler(BaseHandler):
     def get(self,*args,**kwargs):
         page = self.get_argument('page', 1)
         page = int(page) if int(page) else 1
-        if self.is_admin():
+        if self.is_customer_service():
             rule= True
         else:
             rule = (Ticket.sender_obj == self.get_current_user_obj())
@@ -30,7 +30,7 @@ class TicketDetailHandler(BaseHandler):
     def get(self,id=1,*args,**kwargs):
         try:
             ticket=self.orm.query(Ticket).filter(Ticket.id==int(id)).one()
-            if (not self.is_admin()) and ticket.sender_obj!=self.get_current_user_obj():
+            if (not self.is_customer_service()) and ticket.sender_obj!=self.get_current_user_obj():
                 raise Exception
             return self.render('ticket_detail.html',ticket=ticket)
         except:
