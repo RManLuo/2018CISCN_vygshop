@@ -140,14 +140,19 @@ class WebExp:
             buf=con.recv(1024)
             if 'GET' in buf:
                 break
-        #print buf
+
         cookie=re.search(r'/\w+=*\s',buf).string
         cookie=cookie.strip().split('/')[1]
         cookie=base64.b64decode(cookie)
-        #print cookie
+
         value=re.search(r'"(.+)"', cookie)
         if value:
-            value.group(1)
+            value=value.group(1)
+
+
+        self.session.cookies.set('username',None)
+        self.session.cookies.set('username', value)
+        rs=self.session.get(self.url+'user').text
 
         return True
 
