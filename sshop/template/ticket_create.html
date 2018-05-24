@@ -5,6 +5,19 @@
 {% end %}
 
 {% block body %}
+<!--<link rel="stylesheet"-->
+      <!--href="//cdn.rawgit.com/balpha/pagedown/master/demo/browser/demo.css"/>-->
+<!--<style>-->
+    <!--.wmd-button > span {-->
+        <!--background-image: url('//cdn.rawgit.com/derobins/wmd/master/images/wmd-buttons.png');-->
+        <!--background-repeat: no-repeat;-->
+        <!--background-position: 0px 0px;-->
+        <!--width: 20px;-->
+        <!--height: 20px;-->
+        <!--display: inline-block;-->
+    <!--}-->
+<!--</style>-->
+
 
 <div class="container">
     <form method="POST" id="submit_form">
@@ -17,10 +30,10 @@
         <div class="form-group col-md-6">
             <label for="wmd-input">正文</label>
             <!--<div id="wmd-button-bar"></div>-->
-            <textarea id="wmd-input" name="wmd-input" class="wmd-input form-control" rows="10"></textarea>
+            <textarea id="wmd-input" name="wmd-input" class="wmd-input form-control" rows="10">{{ text }}</textarea>
         </div>
         <div class="form-group col-md-6">
-            <label for="wmd-preview">预览</label>
+            <label for="wmd-preview"">预览</label>
             <div class="card" style="height: 100%">
             <div id="wmd-preview" class="wmd-panel wmd-preview card-body">
 	        </div>

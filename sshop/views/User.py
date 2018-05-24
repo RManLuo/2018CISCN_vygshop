@@ -84,11 +84,9 @@ class ResetPasswordHanlder(BaseHandler):
 
 
 class changePasswordHandler(BaseHandler):
-    @tornado.web.authenticated
     def get(self):
         return self.render('change.html')
 
-    @tornado.web.authenticated
     def post(self, *args, **kwargs):
         old_password = self.get_argument('old_password')
         password = self.get_argument('password')
