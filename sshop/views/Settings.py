@@ -5,20 +5,20 @@ from sshop.base import BaseHandler
 from sshop.models import Commodity, User, Ticket, SiteConfig
 import requests, json
 from Shop import check_user_valid
-from tools import import_args
+from tools import *
 
 class SettingsSMSHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
     def get(self,*args,**kwargs):
-        c = self.orm.query(SiteConfig).filter(SiteConfig.name=='sms_settings').one()
-        return self.render('settings_sms.html',**json.loads(c.value))
+        c = read_config('sms_settings')
+        return self.render('settings_sms.html',**c)
 
     @tornado.web.authenticated
     @check_user_valid
     @import_args
     def post(self,api_url,method,name,template,test_tel, *args, **kwargs):
-        c = self.orm.query(SiteConfig).filter(SiteConfig.name=='sms_settings').one()
+        c = read_config('sms_settings')
         try:
             text = template.format(tel=test_tel, code='1234')
             if method == '0':
@@ -26,9 +26,9 @@ class SettingsSMSHandler(BaseHandler):
             if method == '1':
                 requests.post(api_url, data={name: text})
         except Exception, e:
-            return self.render('settings_sms.html', danger=1, reason=str(e),**json.loads(c.value))
+            return self.render('settings_sms.html', danger=1, reason=str(e),**c)
         else:
-            c.value = json.dumps({"api_url": api_url,
+            set_config('sms_settings',{"api_url": api_url,
                                   "method": method,
 
                                   "name": name,
