@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     db.add(User(username='ItouMakoto', mail='ItouMakoto@it.edu.cn', check_code='6666', phone_number='0', integral=-2333,
                 permission=0, valid=True,
-                password='Flag{23333}'))
+                password=os.environ.get('flaaaaag')))
     db.add(Ticket(title=u'点击获得flag',markdown=u'不存在的2333\n\n别人笑我死得早，我笑别人日的少',
                   html=u'<p>不存在的2333</p><p>别人笑我死得早，我笑别人日的少</p>',sender=2))
 
