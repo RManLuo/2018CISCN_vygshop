@@ -39,11 +39,8 @@ class TicketDetailHandler(BaseHandler):
 class TicketCreateHandler(BaseHandler):
     @tornado.web.authenticated
     @check_user_valid
-    @import_args
-    def get(self,url="",etime="",*args,**kwargs):
-        # TODO: error info
-        text='出现的错误链接：[该物品]({url})\n\n出现错误的时间：{etime}\n\n'.format(url=url,etime=etime)
-        return self.render('ticket_create.html',text=text)
+    def get(self,*args,**kwargs):
+        return self.render('ticket_create.html')
 
     @tornado.web.authenticated
     @check_user_valid
