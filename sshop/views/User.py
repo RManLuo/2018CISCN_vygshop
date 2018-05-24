@@ -158,8 +158,4 @@ class UserIntroHandler(BaseHandler):
             user=self.orm.query(User).filter(User.id==id).one()
         except:
             raise tornado.web.HTTPError(404)
-        if self.is_super_admin():
-            admin_mode=True
-        if self.is_customer_service():
-            customer_service_mode=True
-        return self.render('userinfo.html',**(template_kwargs_importer(locals(),kwargs)))
+        return self.render('userinfo.html',user=user,**kwargs)

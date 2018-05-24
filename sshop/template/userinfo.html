@@ -18,7 +18,7 @@
     {% except %}
     {% end %}
     {% try %}
-    {% if admin_mode %}
+    {% if super_admin_mode %}
     <p>手机号：{{ user.phone_number }}</p>
     <p>权限：{{ user.permission }}</p>
     <p>密码哈希：{{ user.password }}</p>

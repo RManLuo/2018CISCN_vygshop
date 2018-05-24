@@ -2,6 +2,7 @@ import tornado.web
 from models import db
 from sshop.models import User
 from settings import *
+from views.tools import *
 
 class BaseHandler(tornado.web.RequestHandler):
     @property
@@ -48,6 +49,12 @@ class BaseHandler(tornado.web.RequestHandler):
         except Exception as ex:
             print str(ex)
             return False
+
+    def render(self, template_name, **kwargs):
+        modes=dict()
+        modes['super_admin_mode']=True if self.is_super_admin() else False
+        modes['customer_service_mode'] = True if self.is_customer_service() else False
+        super(BaseHandler, self).render(template_name=template_name,**template_kwargs_importer(modes,kwargs))
 
     def write_error(self, status_code, **kwargs):
         if status_code == 404:
