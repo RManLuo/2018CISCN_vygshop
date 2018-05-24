@@ -17,6 +17,7 @@ handlers = [
     (r'/captcha', CaptchaHandler),
 
     (r'/user', UserInfoHandler),
+    (r'/user/(\d+)', UserIntroHandler),
     (r'/user/change', changePasswordHandler),
     (r'/pass/reset', ResetPasswordHanlder),
     (r'/user/check',UserCheckHandler),
@@ -30,5 +31,5 @@ handlers = [
     (r'/tickets/create', TicketCreateHandler),
     (r'/tickets/(\d+)', TicketDetailHandler),
 
-    (r'/settings/sms',SettingsSMSHandler)
+    (r'/settings/sms',SettingsSMSHandler),
 ]

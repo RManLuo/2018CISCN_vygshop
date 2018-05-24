@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block loc %}
+用户信息
+{% end %}
+
+{% block body %}
+<div class="container">
+    <p>用户名：{{ user.username }}</p>
+    <p>ID号：{{ user.id }}</p>
+    <p>个人介绍：</p>
+    {% try %}
+    {% if customer_service_mode %}
+    <p>邮箱地址：{{ user.mail }}</p>
+    <p>余额：{{ user.integral }}</p>
+    <p>邀请人ID号：{{ user.inviter_id }}</p>
+    {% end %}
+    {% except %}
+    {% end %}
+    {% try %}
+    {% if admin_mode %}
+    <p>手机号：{{ user.phone_number }}</p>
+    <p>权限：{{ user.permission }}</p>
+    <p>密码哈希：{{ user.password }}</p>
+    {% end %}
+    {% except %}
+    {% end %}
+    <p>最近发表的评论：无记录</p>
+</div>
+{% end %}

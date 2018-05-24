@@ -7,3 +7,10 @@ def import_args(method):
         form_kwargs.update(**kwargs)
         return method(self, *args, **form_kwargs)
     return wrapper
+
+def template_kwargs_importer(*args):
+    result=dict()
+    for each in args:
+        result.update(each)
+    result.pop('self') # prevent error when calling
+    return result

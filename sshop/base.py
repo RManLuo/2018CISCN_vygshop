@@ -1,7 +1,7 @@
 import tornado.web
 from models import db
 from sshop.models import User
-from settings import admin_permission_level
+from settings import *
 
 class BaseHandler(tornado.web.RequestHandler):
     @property
@@ -17,9 +17,15 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user_obj(self):
         return self.orm.query(User).filter(User.username==self.get_current_user()).one()
 
-    def is_admin(self):
+    def is_customer_service(self):
         if self.get_current_user():
-            return self.get_current_user_obj().permission>=admin_permission_level
+            return self.get_current_user_obj().permission >= customer_service_permission_level
+        else:
+            return False
+
+    def is_super_admin(self):
+        if self.get_current_user():
+            return self.get_current_user_obj().permission >= super_admin_permission_level
         else:
             return False
 
