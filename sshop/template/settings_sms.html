@@ -7,6 +7,12 @@
 {% block body %}
 <form method="POST" id="submit_form">
     {% raw xsrf_form_html() %}
+    <div class="switch">
+        <label for="force_phone_check">开启手机验证</label>
+        <input type="checkbox" id="force_phone_check" name="force_phone_check"
+               {% if force_phone_check %}checked {% end %}/>
+    </div>
+    {% if force_phone_check %}
     <div class="form-group">
         <label for="api_url">请求路径</label>
         <input class="form-control" name="api_url" id="api_url" maxlength="200" required value="{{ api_url }}">
@@ -26,6 +32,7 @@
         <label for="template">请求模板</label>
         <textarea class="form-control" name="template" id="template" rows="10" required>{{ template }}</textarea>
     </div>
+    {% end %}
     <div class="form-row">
         <div class="col-md-4 mb-3">
             <button type="submit" class="btn btn-success btn-block">保存</button>
@@ -34,9 +41,11 @@
             <button type="submit" class="btn btn-primary btn-block">保存并测试</button>
         </div>
     </div>
+    {% if force_phone_check %}
     <div class="form-group">
         <label for="test_tel">测试手机号</label>
         <input class="form-control" name="test_tel" id="test_tel" required>
     </div>
+    {% end %}
 </form>
 {% end %}
