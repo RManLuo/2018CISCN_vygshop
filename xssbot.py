@@ -93,12 +93,11 @@ def main():
     driver = webdriver.PhantomJS(executable_path="D:\ciscn_web\phantomjs.exe")  # driver 地址
     driver.set_page_load_timeout(10)  # 加载网页延迟时间
     driver.set_script_timeout(10)  # 加载脚本延迟时间
+    check = WebChecker('127.0.0.1', '8233', '_xsrf')
+    Cokie = check.login_test()
+    driver.add_cookie({'name': 'username', 'value': Cokie['username'], 'domain': '127.0.0.1', 'path': '/'})
     while 1:
         try:
-            driver.delete_all_cookies()
-            check=WebChecker('127.0.0.1','8233','_xsrf')
-            Cokie=check.login_test()
-            driver.add_cookie({'name':'username','value':Cokie['username'],'domain':'127.0.0.1','path':'/'})
             driver.get("http://127.0.0.1:8233/user")
             time.sleep(5)
             if "AdMIn_for_CH3k3r" in driver.find_element_by_xpath('/html/body/div[1]/div[2]/div/div[1]/div[1]/div/h5').text:  # 检查是否登陆后台
