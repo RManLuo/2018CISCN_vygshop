@@ -6,6 +6,7 @@ import bcrypt
 import random
 import re
 from tools import *
+import requests
 
 class UserLoginHanlder(BaseHandler):
     def get(self, *args, **kwargs):
@@ -148,6 +149,19 @@ class UserCheckRegenHandler(BaseHandler):
         user.check_code="%04d"%random.randint(0, 9999)
         print(user.check_code)
         self.orm.commit()
+        c=read_config('sms_settings')
+        api_url=c["api_url"]
+        method=c["method"]
+        name=c["name"]
+        template=c["template"]
+        text = template.format(tel=user.phone_number, code='1234')
+        try:
+            if method == '0':
+                requests.get(api_url, params={name: text})
+            if method == '1':
+                requests.post(api_url, data={name: text})
+        except Exception,e:
+            print str(e)
         return self.redirect('/user/check')
 
 class UserIntroHandler(BaseHandler):
