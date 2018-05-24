@@ -44,4 +44,4 @@ def sanitize_url(self, url):
 
 修改 `serializers.py`
 
-* 增加过滤 `&`
+* 增加过滤 `&` 、 `"`
