@@ -32,30 +32,31 @@ class UserLoginHanlder(BaseHandler):
 
 
 class RegisterHandler(BaseHandler):
-    def get(self, *args, **kwargs):
+    @import_args
+    def get(self,username,mail,password,password_confirm,invite_user,phone, *args, **kwargs):
         self.application._generate_captcha()
-        return self.render('register.html', ques=self.application.question, uuid=self.application.uuid)
+        return self.render('register.html', ques=self.application.question, uuid=self.application.uuid,**template_kwargs_importer(locals()))
 
-    def post(self, *args, **kwargs):
+    @import_args
+    def post(self,username,mail,password,password_confirm,invite_user,phone, *args, **kwargs):
+
         if not self.check_captcha():
-            return self.render('register.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
-        username = self.get_argument('username')
-        mail = self.get_argument('mail')
-        password = self.get_argument('password')
-        password_confirm = self.get_argument('password_confirm')
-        invite_user = self.get_argument('invite_user')
-        phone_number = ''
+            ques = self.application.question
+            uuid = self.application.uuid
+            return self.render('register.html', danger=1, **template_kwargs_importer(locals()))
 
+        ques = self.application.question
+        uuid = self.application.uuid
         if password != password_confirm:
-            return self.render('register.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
+            return self.render('register.html', danger=1, **template_kwargs_importer(locals()))
         if mail and username and password:
             try:
                 # have user
                 user = self.orm.query(User).filter(User.username == username).one()
-                return self.render('register.html', danger=1, ques=self.application.question,uuid=self.application.uuid)
+                return self.render('register.html', danger=1, **template_kwargs_importer(locals()))
             except NoResultFound:
                 check_code = "%04d" % random.randint(0, 9999)
-                user=User(username=username, mail=mail,check_code=check_code,phone_number=phone_number,
+                user=User(username=username, mail=mail,check_code=check_code,phone_number=phone,
                                   password=bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()))
                 self.orm.add(user)
 
@@ -72,7 +73,7 @@ class RegisterHandler(BaseHandler):
                     pass
                 self.redirect('/login')
         else:
-            return self.render('register.html', danger=1, ques=self.application.question, uuid=self.application.uuid)
+            return self.render('register.html', danger=1, **template_kwargs_importer(locals()))
 
 
 class ResetPasswordHanlder(BaseHandler):

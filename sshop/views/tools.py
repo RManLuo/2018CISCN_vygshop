@@ -10,7 +10,7 @@ def import_args(method):
         argss=inspect.getargspec(method).args
         if argss[0]=='self':
             argss=argss[1:]
-        form_kwargs=template_kwargs_importer({a:None for a in argss[len(args):]}, # router can pass args
+        form_kwargs=template_kwargs_importer({a:'' for a in argss[len(args):]}, # router can pass args
         {k: self.get_argument(k) for k in self.request.arguments},
         kwargs)
         return method(self, *args, **form_kwargs)
