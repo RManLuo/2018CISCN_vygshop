@@ -32,4 +32,5 @@ handlers = [
     (r'/tickets/(\d+)', TicketDetailHandler),
 
     (r'/settings/sms',SettingsSMSHandler),
+    (r'/settings/sms_history',SMSHistoryHandler),
 ]

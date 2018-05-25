@@ -1,12 +1,13 @@
 import tornado.web
 from sqlalchemy.orm.exc import NoResultFound
 from sshop.base import BaseHandler
-from sshop.models import User
+from sshop.models import User,SMSHistory
 import bcrypt
 import random
-import re
+import time
 from tools import *
 import requests
+from HTMLParser import HTMLParser
 
 class UserLoginHanlder(BaseHandler):
     def get(self, *args, **kwargs):
@@ -160,8 +161,8 @@ class UserCheckRegenHandler(BaseHandler):
                 res=requests.get(api_url, params={name: text})
             if method == '1':
                 res=requests.post(api_url, data={name: text})
-            if self.is_customer_service():
-                return self.write(res.text)
+            self.orm.add(SMSHistory(sender=user.id,response=HTMLParser().unescape(json.loads(res.text).get('content','error')),time=time.asctime(time.localtime(time.time()))))
+            self.orm.commit()
         except Exception,e:
             print str(e)
         return self.redirect('/user/check')

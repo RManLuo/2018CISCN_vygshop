@@ -2,7 +2,7 @@
 import tornado.web
 from sqlalchemy.orm.exc import NoResultFound
 from sshop.base import BaseHandler
-from sshop.models import Commodity, User, Ticket, SiteConfig
+from sshop.models import SMSHistory
 import requests, json
 from Shop import check_user_valid
 from tools import *
@@ -38,3 +38,9 @@ class SettingsSMSHandler(BaseHandler):
         else:
             set_config('force_phone_check', False)
             return self.render('settings_sms.html',  force_phone_check=force_phone_check,success=1)
+
+class SMSHistoryHandler(BaseHandler):
+    @tornado.web.authenticated
+    @check_user_admin
+    def get(self):
+        return self.render('sms_history.html',history=self.orm.query(SMSHistory))
