@@ -34,13 +34,12 @@
 </root>
 ```
 
-### 6、以管理员身份去实名认证
+### 6、触发发送短信操作，进入管理员后台查看发送记录
 
-![认证](认证.png)
-点击发短信
+![](result.png)
 
-获得flag
-![flag](flag.png)
+
+
 
 修复点：
 
@@ -60,18 +59,18 @@
 
 原理：
 
-出问题的函数集中在`view/tools.py`，这里存放了常用的辅助函数。
+出问题的函数集中在`view/tools.py`，这里存放了常用的辅助函数。当不同修饰器连接时，验证规则不健壮造成对模板逻辑的注入。
 
 template_kwargs_importer用于合并参数字典
 ![](tools_1.png)
 
 ![](tools_2.png)
 
-import_args用于直接将表单导入到函数参数表，方便处理，例如：
+import_args用于直接将表单导入到函数参数表，方便保存后显示表单保存好的数据，提高用户和编码体验（因为数据已经在命名空间中，直接传给模板引擎即可，不需要再重复写参数列表），例如：
 
 ![](import_args.png)
 
-RequestHandler.render被修改，用于向模板系统引入常用变量（比如区分管理员模式）
+RequestHandler.render被修改，用于向模板系统引入常用变量（比如渲染顶栏菜单时，区分管理员模式）
 ![](render.png)
 
 render里面`**template_kwargs_importer(modes,kwargs)` 由于合并次序问题，当kwargs有super_admin_mode或customer_service_mode时，会将真正的值覆盖掉，而敏感信息显示与否是交予模板控制的，当以后门的方式加入上述参数，便可以对应权限查看用户敏感信息，造成隐私泄露。
