@@ -90,7 +90,7 @@ class WebChecker:
 
 
 def main():
-    driver = webdriver.PhantomJS(executable_path="D:\ciscn_web\phantomjs.exe")  # driver 地址
+    driver = webdriver.PhantomJS(executable_path="phantomjs")  # driver 地址
     driver.set_page_load_timeout(10)  # 加载网页延迟时间
     driver.set_script_timeout(10)  # 加载脚本延迟时间
     check = WebChecker('127.0.0.1', '8233', '_xsrf')

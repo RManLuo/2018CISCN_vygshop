@@ -1,6 +1,5 @@
 from flask import Flask,request,jsonify
 from lxml import etree
-import requests
 
 app = Flask(__name__)
 
@@ -9,8 +8,8 @@ def send_sms():
     if request.method == 'POST':
         if request.form.get('data'):
             tree1 = etree.fromstring(request.form['data'].encode('utf8'))
-            requests.get(url='127.0.0.1/callbak/',params={'status':etree.tostring(tree1)})
-            return jsonify({'status':0,'msg':'Success'})
+            print etree.tostring(tree1)
+            return jsonify({'status':0,'msg':'Success','content':etree.tostring(tree1)})
         else:
             return jsonify({'status':1,'msg':'no params'})
     else:

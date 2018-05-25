@@ -15,4 +15,7 @@ six==1.11.0
 SQLAlchemy==1.2.7
 tornado==5.0.2
 urllib3==1.22
+markdown
 bleach
+selenium
+flask
